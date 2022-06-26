@@ -163,9 +163,9 @@ var lessonupload = multer({storage: lessonstorage});
 
 const db = mysql.createPool({
 	host: 'nl-srv-web324.main-hosting.eu',
-	user: 'u671633553_admin_padah',
-	password: 'Padahweb@2022',
-	database: 'u671633553_padahweb'
+	user: 'u671633553_chatbot',
+	password: 'Chatbot@db69',
+	database: 'u671633553_chatbot'
 });
 
 // const db = mysql.createPool({

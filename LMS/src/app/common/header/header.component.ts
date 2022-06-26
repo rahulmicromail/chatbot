@@ -122,11 +122,11 @@ export class HeaderComponent implements OnInit {
       var encryptInfo = encodeURIComponent(CryptoJS.AES.encrypt(JSON.stringify(resp.data[0]), 'secret key 123').toString());
       this.restApi.setAccessToken(encryptInfo);
       if(this.tk.role_id == '10'){
-        window.location.href = '/training/dasboard';
+        window.location.href = '/dashboard';
       }else if(this.tk.role_id == '9'){
-        window.location.href = '/training/mentor/dasboard';
+        window.location.href = '/dashboard';
       }else{
-        window.location.href = '/user';
+        window.location.href = '/dashboard';
       }
     })
   }
