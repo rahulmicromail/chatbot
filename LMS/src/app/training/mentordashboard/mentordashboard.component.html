@@ -1,0 +1,97 @@
+<img src='../../../assets/img/mentees-banner.jpg' class='mt-5 w-100 h-100' *ngIf="displayTable" />
+<div class="wrapper container mb-5 page-container">
+    <div class="main">
+        <main class="content">
+            <div class="row">
+                <div class="col-md-12 p-0" *ngIf="displayTable">
+                    <div *ngIf='courselist.length > 0'>
+                        <h3 class='mb-3 p-4 font-weight-bold'>Upcoming Course</h3>                   
+                        <div class='col-md-4' *ngFor='let list of courselist'>
+                            <div class='course-card clearfix'>
+                                <!-- <div class='course-img' style="background-image:url('../../../assets/img/no-img-found-small.png');float:left;"> </div -->
+                                <div class='course-img' style="float:left;">
+                                    <img [src]='list.course_image_url' *ngIf='list.course_image_url' height="100%" style='cursor:pointer;width:100%' />
+                                    <img src='../../../assets/img/no-img-found-small.png' *ngIf='!list.course_image_url' height="100%" style='cursor:pointer;width:100%' />
+                                </div>
+                                <div class='course-dtls' style='float:left;'>
+                                    <h6 class='course-name'>{{list.course_name}}</h6>
+                                    <p>{{list.course_description}}</p>
+                                    <div class='course-action'>
+                                        <label class='label label-primary' (click)='openCourseDtls(list.course_id)'>
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>                                       
+                </div>
+                <div class="col-md-12 p-0" *ngIf="displayTable" style='margin-top:30px;'>
+                    <div *ngIf='ongoinglist.length > 0'>
+                        <h3 class='mb-3 p-4 font-weight-bold'>Ongoing Course</h3>                   
+                        <div class='col-md-4' *ngFor='let list of ongoinglist'>
+                            <div class='course-card clearfix'>
+                                <!-- <div class='course-img' style="background-image:url('../../../assets/img/no-img-found-small.png');float:left;"> </div> -->
+                                <div class='course-img' style="float:left;">
+                                    <img [src]='list.course_image_url' *ngIf='list.course_image_url' height="100%" style='cursor:pointer;width:100%' />
+                                    <img src='../../../assets/img/no-img-found-small.png' *ngIf='!list.course_image_url' height="100%" style='cursor:pointer;width:100%' />
+                                </div>
+                                <div class='course-dtls' style='float:left;'>
+                                    <h6 class='course-name'>{{list.course_name}}</h6>
+                                    <p>{{list.course_description}}</p>
+                                    <div class='course-action'>
+                                        <label class='label label-primary' (click)='openCourseDtls(list.course_id)'>
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 p-0" *ngIf="displayMenteeModal" style='margin-top:100px;'>
+                    <div class='btn-div clearfix'>
+                        <button class='btn btn-primary float-right' (click)='closeMenteeDiv()'>Back to the List</button>
+                    </div>
+                    <p style='margin-top:25px;'>{{details[0].course_description}}</p>
+                    <div class='class-container' *ngFor='let dtls of details'>
+                        <h5 class='class-nme-div' (click)='toggleClass(dtls.class_id)'> 
+                            <span>{{dtls.class_name}}</span>
+                            <label class='label label-success' [ngClass]="dtls.connection_link ? 'active' : 'inactive'" (click)='openLink(dtls.connection_link)' >
+                                <i class="fa fa-link" aria-hidden="true"></i>
+                            </label>
+                            <label class='label label-danger float-right' *ngIf="dtls.class_status == 'N'"> Disabled </label>
+                        </h5>
+                        <div class='class-div-hide' id='row_{{dtls.class_id}}'>
+                            <h3 class='mentee-status-msg' *ngIf='menteestatus=="N"'>You have been removed from this class</h3>
+                            <div class='lessons-details' *ngIf='menteestatus!="N"'>
+                                <p class='class-desc'>{{dtls.description}}</p>
+                                <div class='lesson-dtls' *ngFor='let lessondtls of lesson'>
+                                    <h6 (click)='toggleLessonClass(lessondtls.row_id)'>
+                                        {{lessondtls.lesson_name}}                                       
+                                        <label class='label float-right' style='display:none;' id='lesson_{{lessondtls.row_id}}_{{dtls.class_id}}'> Completed </label>
+                                    </h6>
+                                    <div class='lesson-div-hide' id='lessondiv_{{lessondtls.row_id}}'>
+                                        <p style='margin-bottom:10px;padding:10px 0;'>{{lessondtls.lesson_description}}</p>
+                                        <h5 *ngIf='arrPDF.length > 0'>List of Attachments</h5>
+                                        <div class='doclist' *ngIf='arrPDF.length > 0'>
+                                            <label class='label label-default mr-10 active' (click)='downloadLessonPDF(doclist.lesson_id, doclist.pdf_path)' *ngFor='let doclist of docsList'>
+                                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                        <h5 *ngIf='arrLink.length > 0' style='margin-top:10px;'>Links for {{lessondtls.lesson_name}}</h5>
+                                        <div class='doclist' *ngIf='arrLink.length > 0'>
+                                            <label class='label label-success active' (click)='openLink(doclist.meeting_url)' *ngFor='let doclist of docsList'>
+                                                <i class="fa fa-link" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

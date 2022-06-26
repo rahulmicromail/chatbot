@@ -1,0 +1,15 @@
+.report-container{margin-top:10%;}
+#report_chart_msg{text-align: center;margin-top: 50px;color: #de5d47;}
+#lms_report:focus{outline:0;box-shadow:none;}
+#lms_report{color:#fff;}
+#pcs_report{margin-bottom:20px;}
+.matched-msg{text-align: center;margin-top: 15px;color: #ec4a4a;}
+#members_type{width:250px;margin-left:40px;font-weight:500;}
+#download_excel{background-color: #ff3030;color: #fff;padding: 5px 9px;border-radius: 50%;font-size: 15px;cursor: pointer;margin-left: 8px;}
+#btn_resetfilter{color:#fff;margin-left:10px;}
+h4#report_chart_msg{margin: 18px 0 0;font-size: 20px;text-align: left;}
+.chart_msg{text-align: center;color: #de5d47;font-weight: 500;}
+.float-left{float:left;}
+.pl-0{padding-left: 0;}
+.page-container{margin-top:150px;}
+.form-group img{width:40px;margin-right:10px;}

@@ -1,0 +1,4 @@
+/* .chart-box {border:1px solid #e0e0e0;box-shadow:0 0 6px #e0e0e0;} */
+.attendance-bar-chart h4{position: absolute; z-index: 1051;left:25%}
+.attendance-bar-chart{position: relative;}
+.stacked-chart{margin-top:-60px;}

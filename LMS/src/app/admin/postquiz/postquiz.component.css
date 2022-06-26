@@ -1,0 +1,39 @@
+.angular-editor-toolbar .angular-editor-toolbar-set .angular-editor-button{min-width:3em;}
+.modal-header{background: linear-gradient(45deg, #1de099, #1dc8cd);}
+.table .action-img-div{width: 20px;float:left;}
+.table .action-img-div img{width: 100%;}
+#footer{display:none;}
+.modal-body{padding:0!important;}
+.modal .card-header{padding: 15px;font-weight:500;font-size:18px;}
+.modal-close{top:13px;font-size:25px;}
+.form-switch .form-check-input:focus{outline: 0; box-shadow: none;}
+.action-img-div{margin-right:15px;}
+#updateBlog{margin-top:5px;}
+.status-img{width:22px;}
+.action-img-div i,.action-img-div input,.action-img-div img{cursor:pointer;}
+#commentApprovalModal #comment_user{font-weight: 700;font-size: 15px;margin-right: 10px;}
+#commentApprovalModal #comment_txt{margin: 2px 0 15px;}
+.fa-thumbs-o-up,.fa-thumbs-o-down{font-size:18px;cursor:pointer;}
+.fa-thumbs-o-up{margin-right:15px;color:#1edaa9;}
+.fa-thumbs-o-down{color:#de5d47;}
+#commentApprovalModal #comment_date{margin-right:10px;}
+.angular-editor-toolbar{font-size:14px!important;padding:.2rem;}
+.angular-editor-toolbar button{margin:10px!important;padding:5px;border-radius:5px;}
+#addPostModal .modal-lg{max-width: 90%;width: 90%;}
+.badge{font-size: 9px;padding: 2px 4px;position: absolute;top: 0;right: -15px;}
+.badge-success{background-color: #5cb85c;}
+.view-blog{height:674px; overflow-y: auto; overflow-x: hidden}
+.action-img-div{position: relative;}
+.label-success{background-color:#80b944;border-radius:5px;padding: 3px 6px;color: #fff;font-size: 10px;}
+.label-danger{background-color:#f32a2a;border-radius:5px;padding: 3px 6px;color: #fff;font-size: 10px;}
+:host ::ng-deep .ck-editor__editable_inline {min-height: 500px;}
+.radio-inline {margin-right: 15px;}
+.nav-tabs a{padding: 10px 20px;display: block;}
+.nav-tabs a:hover{text-decoration: none;}
+.nav-tabs a.active{border:1px solid #e0e0e0;border-bottom:0;border-top-right-radius:5px;border-top-left-radius:5px;}
+.float-right{float:right;}
+.question-list{border: 1px solid #e0e0e0;border-radius: 3px;padding: 5px 0;}
+.question-list .col-md-2{text-align: right;}
+.question-list .col-md-2 i{cursor:pointer;}
+.question-list .col-md-2 i:first-child{color:#1ddca4;}
+.question-list .col-md-2 i:last-child{color:#046664;}

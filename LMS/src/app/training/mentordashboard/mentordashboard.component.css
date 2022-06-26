@@ -1,0 +1,24 @@
+.course-img{width: 40%;height: 150px;background-repeat: no-repeat;background-position: center;background-size: cover;border-right: 1px solid #e0e0e0;display:inline-block;border-top-left-radius: 5px;border-bottom-left-radius: 5px;}
+.course-dtls{width:60%;display:inline-block;padding: 10px;}
+.course-card{border: 1px solid #e0e0e0;box-shadow: 0 0 6px #e0e0e0;border-radius: 5px;}
+.course-action .label{border-radius: 100%;margin-right: 10px;padding: 7px 9px;cursor:pointer;}
+.course-name{font-weight:600;}
+.wrapper{margin-top:20px;}
+.course-dtls p{display: block;display: -webkit-box !important;max-width: 100%;height:65px;margin: 0 auto;font-size: 14px;line-height:1.6;-webkit-line-clamp:3;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;}
+.course-name{display: block;display: -webkit-box !important;max-width: 100%;height:20px;font-size: 14px;line-height:1.6;-webkit-line-clamp:1;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;margin-bottom:10px;}
+.course-action{margin-top:10px;}
+.class-nme-div{background-color:#f8f8f8;padding: 20px;border-top-left-radius:5px;border-top-right-radius:5px;border:#f8f8f8;margin:20px 0 0;cursor:pointer;border-bottom:1px solid #e0e0e0;}
+.class-div-hide,.lesson-div-hide{display:none;padding:20px;border:1px solid #f8f8f8;border-bottom-left-radius:5px;border-bottom-right-radius:5px;}
+.class-nme-div span{text-transform:capitalize;font-weight:600;margin-right:20px;}
+.class-nme-div label.active,.class-nme-div label.inactive{border-radius: 50%;padding: 6px 9px;font-size: 13px;cursor:pointer;background-color: #630460;}
+label.inactive{pointer-events: none;opacity: 0.2;}
+.class-container{box-shadow: 0 0 6px #e0e0e0;}
+.lesson-dtls h6{background-color: #e0e0e0;padding: 10px;font-weight: 500;margin-bottom: 0;}
+.lesson-dtls p{padding: 10px;}
+.mr-10 {margin-right: 10px;}
+.course-card{margin-bottom: 25px;}
+.label-success{padding: 3px 5px;}
+.menteestatus{text-align:center;color:crimson;}
+.lesson-dtls h6{margin-bottom: 8px;}
+.label-success,.label-danger{font-size: 11px;}
+.page-container{margin-top:50px;}

@@ -1,0 +1,186 @@
+<div class="backdrop" [ngStyle]="{'display':displayQuiz}"></div>
+
+<div class="wrapper blog-container container">
+    <div class="main">
+        <main class="content">
+            <div class="container-fluid p-0">
+                <div class="tab-content">
+                    <div id="quiz-tab" class="tab-pane in active">
+                        <h1 class="w-100 h3 mt-3 mb-3 clearfix">
+                            Assessment List
+                        </h1>
+                        <div class="row">
+                            <div class="col-md-12 col-xl-12">
+                                <div class="card">
+                                    <div class="card-body h-100">
+                                        <table class='table-bordered table'>
+                                            <thead>
+                                                <tr>
+                                                    <th>Lesson Name</th>
+                                                    <th>Assessment Name</th>
+                                                    <th>Created By</th>
+                                                    <th>Created On</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let quiz of quizlist">
+                                                    <td>{{quiz.lesson_name}}</td>
+                                                    <td>{{quiz.assessment_name}}</td>
+                                                    <td>{{quiz.name}}</td>
+                                                    <td>{{quiz.created_on | date: "dd MMM, yyyy"}}</td>
+                                                    <td style='text-transform:uppercase;'>
+                                                        <span *ngIf = "quiz.status == 'Y'" class='label label-success'> Enable </span>
+                                                        <span *ngIf = "quiz.status == 'N'" class='label label-danger'> Disable </span>
+                                                    </td>
+                                                    <td class='clearfix w-100'>
+                                                        <label class="switch">
+                                                            <input type="checkbox" [attr.checked]="quiz.status == 'Y' ? true : null" (change)='[changeStatus($event,quiz.row_id)]' />
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                        <!-- <div class='action-img-div'>
+                                                            <i class="fa fa-comments-o" aria-hidden="true" style='color:#630460;margin-left:10px;' (click)=[commentModal(blog.blog_id)]></i>
+                                                            <span [ngClass]="(blog.comment_count > 0) ? 'badge  badge-success' : 'badge badge-secondary'">{{blog.comment_count}}</span>
+                                                        </div>
+                                                        <div class='action-img-div'>
+                                                            <i class="fa fa-eye" aria-hidden="true" style='color:#d9534f;margin-left:10px;' (click)='viewModal(blog.blog_id)'></i>
+                                                        </div> -->
+                                                        <div class='action-img-div'>
+                                                            <img src='assets/img/edit.png' class='action-img' data-toggle='modal' data-target='#addQuizModal' (click)=[editQuiz(quiz.row_id)] />
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div class="modal" id="addQuizModal" role="dialog" [ngStyle]="{'display':displayQuiz}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" *ngIf='!edit'>Add Question</h5>
+                <h5 class="modal-title" *ngIf='edit'>Edit Question</h5>
+                <button class="close" data-dismiss="modal" id='editmodal-close' (click)='closeLoginModal()'> <span>&times;</span> </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">                  
+                    <form id='blog_form' name='addBlogForm' #f="ngForm" class='row' (ngSubmit)="f.form.valid && submit(f) ">
+                        <!-- <div class="form-group col-md-6">
+                            <label for="lesson_name">Lesson Name<span style="color: red;">*</span></label>
+                            <input class='form-control' id='lesson_name' [(ngModel)]='addquiz.lesson_name' #lesson_name="ngModel" name="lesson_name" [ngClass]="{'invalid-data': lesson_name.invalid && f.submitted, 'valid-data': lesson_name.valid && f.submitted}" required />
+                            <div class="error_msg" *ngIf="f.submitted && lesson_name.invalid">
+                                <div *ngIf="lesson_name.errors.required">
+                                    <small class="error_text"> Lesson Name is required</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="assessment_name">Assessment Name<span style="color: red;">*</span></label>
+                            <input class='form-control' id='assessment_name' [(ngModel)]='addquiz.assessment_name' #assessment_name="ngModel" name="assessment_name" [ngClass]="{'invalid-data': assessment_name.invalid && f.submitted, 'valid-data': assessment_name.valid && f.submitted}" required />
+                            <div class="error_msg" *ngIf="f.submitted && assessment_name.invalid">
+                                <div *ngIf="assessment_name.errors.required">
+                                    <small class="error_text"> Assessment Name is required</small>
+                                </div>
+                            </div>
+                        </div -->
+
+                        <h5 class='px-4 pt-4 mb-2'> Question List </h5>
+                        <ul class='px-4 mb-5 mt-3'>
+                            <li *ngFor='let list of questionlist' class='question-list w-100 clearfix'>
+                                <span class='col-md-10 float-left'>{{list.question}}</span>
+                                <span class='col-md-2 float-left'>
+                                    <i class="fa fa-pencil mx-4" aria-hidden="true" (click)='editQuestions(list.quiz_id)'></i>
+                                    <i class="fa fa-times" aria-hidden="true" (click)='disableQuestions(list.quiz_id)'></i>
+                                </span>
+                            </li>
+                            <li *ngIf='questionlist.length == 0' class='w-100' style='font-weight:bold;text-align:center;'>
+                                No List To be displayed
+                            </li>
+                        </ul>
+
+                        <div class="form-group col-md-12">
+                            <label for="question">
+                                Quiz Question<span style="color: red;">*</span>
+                                &nbsp; <label class='label label-success' (click)='resetForm(f)' style='cursor:pointer;'>Reset Form</label>
+                            </label>
+                            <textarea rows='3' name='question' class="form-control" id='question' placeholder='Enter the Quiz Question' [(ngModel)]='addquiz.question'  #question='ngModel'  [ngClass]="{'invalid-data': question.invalid && f.submitted, 'valid-data': question.valid && f.submitted}"  required></textarea>
+                            <div class="error_msg" *ngIf="question.errors && (question.dirty || question.touched || f.submitted)">
+                                <div *ngIf="question.errors.required">
+                                    <small class="error_text" >Quiz Question is required</small> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="option1">Option 1<span style="color: red;">*</span></label>
+                            <textarea rows='3' name='option1' class="form-control" id='option1' placeholder='Enter the option1' [(ngModel)]='addquiz.option1'  #option1='ngModel'  [ngClass]="{'invalid-data': option1.invalid && f.submitted, 'valid-data': option1.valid && f.submitted}"  required></textarea>
+                            <div class="error_msg" *ngIf="option1.errors && (option1.dirty || option1.touched || f.submitted)">
+                                <div *ngIf="option1.errors.required">
+                                    <small class="error_text" >Option1 is required</small> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="option2">Option 2<span style="color: red;">*</span></label>
+                            <textarea rows='3' name='option2' class="form-control" id='option2' placeholder='Enter the option2' [(ngModel)]='addquiz.option2'  #option2='ngModel'  [ngClass]="{'invalid-data': option2.invalid && f.submitted, 'valid-data': option2.valid && f.submitted}"  required></textarea>
+                            <div class="error_msg" *ngIf="option2.errors && (option2.dirty || option2.touched || f.submitted)">
+                                <div *ngIf="option2.errors.required">
+                                    <small class="error_text" >Option2 is required</small> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="option3">Option 3<span style="color: red;">*</span></label>
+                            <textarea rows='3' name='option3' class="form-control" id='option3' placeholder='Enter the option3' [(ngModel)]='addquiz.option3'  #option3='ngModel'  [ngClass]="{'invalid-data': option3.invalid && f.submitted, 'valid-data': option3.valid && f.submitted}"  required></textarea>
+                            <div class="error_msg" *ngIf="option3.errors && (option3.dirty || option3.touched || f.submitted)">
+                                <div *ngIf="option3.errors.required">
+                                    <small class="error_text" >Option3 is required</small> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="option4">Option 4<span style="color: red;">*</span></label>
+                            <textarea rows='3' name='option4' class="form-control" id='option4' placeholder='Enter the option4' [(ngModel)]='addquiz.option4'  #option4='ngModel'  [ngClass]="{'invalid-data': option4.invalid && f.submitted, 'valid-data': option4.valid && f.submitted}"  required></textarea>
+                            <div class="error_msg" *ngIf="option4.errors && (option4.dirty || option4.touched || f.submitted)">
+                                <div *ngIf="option4.errors.required">
+                                    <small class="error_text" >Option4 is required</small> 
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <label id="example-radio-group-label" class='w-100'>Is Answer ?</label>
+                            <label class="radio-inline">
+                                <input type="radio" value='1' id='is_answer_1' name="addquiz.is_answer"> &nbsp; Option 1
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" value='2' id='is_answer_2' name="addquiz.is_answer"> &nbsp; Option 2
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" value='3' id='is_answer_3' name="addquiz.is_answer"> &nbsp; Option 3
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" value='4' id='is_answer_4' name="addquiz.is_answer"> &nbsp; Option 4
+                            </label>
+                        </div>
+                        
+                        <div class="form-group col-md-12">
+                            <button class="btn btn-primary" *ngIf='!edit'> Add </button>
+                            <button class="btn btn-primary" *ngIf='edit'> Update </button>
+                            <button class="btn btn-red mx-3" (click)='closeLoginModal()'> Close </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

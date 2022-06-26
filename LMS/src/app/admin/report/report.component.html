@@ -1,0 +1,19 @@
+<div class='container' style='margin-top:125px;'>
+    <div class='row'>
+        <div class='col-md-6 chart-box'>
+            <h4 class='text-center'>Star Rating For Professor</h4>
+            <google-chart [title]="title" [type]="type" [data]="data" [columns]="columnNames" [options]="options" [width]='width' [height]='height'> </google-chart>
+        </div>
+        <div class='col-md-6 chart-box'>
+            <h4 class='text-center'>Star Rating For Site Experiences</h4>
+            <google-chart [title]="expData.title" [type]="expData.type" [data]="expData.data" [columns]="expData.columnNames" [options]="expData.options" [width]='width' [height]='height'> </google-chart>
+        </div>
+    </div>
+
+    <div class='row'>
+        <div class='col-md-12 attendance-bar-chart' style='margin-top:100px;'>
+            <h4 class='text-center'>Attendance per month (for students, classes per month)</h4>
+            <google-chart class='stacked-chart' [type]="chartData.type" [options]="chartData.options" [data]="chartData.data" [columns]="chartData.chartColumns" [width]="chartData.width" [height]="chartData.height"></google-chart>
+        </div>
+    </div>
+</div>

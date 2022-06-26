@@ -1,0 +1,107 @@
+<div class="form">
+    <!-- action="forms/contact.php" method="post" role="form" class="php-email-form" -->
+    <form  role="form" #f="ngForm" (ngSubmit)="f.form.valid && visitorDetails(f)">
+        <div class="row">
+            <div class="form-group col-lg-6">
+                <input type="text" name="visitor_name" class="form-control" id="visitor_name" placeholder="Your Name*" [(ngModel)]="visitorsdetails.visitor_name" #visitor_name="ngModel" [ngClass]="{'invalid-data': visitor_name.invalid && f.submitted, 'valid-data': visitor_name.valid && f.submitted}" required>
+                <div class="error_msg"
+                *ngIf="visitor_name.errors && (visitor_name.dirty || visitor_name.touched || f.submitted)">
+                <div *ngIf="visitor_name.errors.required">
+                    <small class="error_text" >Name is required</small> 
+                </div>
+            </div>
+            
+            </div>
+            <div class="form-group col-lg-6">
+                <input type="email" class="form-control" name="visitor_email_id" id="visitor_email_id"  placeholder="Your Email*" data-rule="email" data-msg="Please enter a valid email" [(ngModel)]="visitorsdetails.visitor_email_id" #visitor_email_id="ngModel" [pattern]="emailPattern" [ngClass]="{'invalid-data':visitor_email_id.invalid && f.submitted, 'valid-data':visitor_email_id.valid && f.submitted}" required />
+                <div class="error_msg"
+                *ngIf="visitor_email_id.errors && (visitor_email_id.dirty || visitor_email_id.touched || f.submitted)">
+                <div *ngIf="visitor_email_id.errors.required">
+                    <small class="error_text" >Email Id is required</small> 
+                </div>
+                <div *ngIf="visitor_email_id.errors.pattern">
+                    <small class="error_text" > Email Id is invalid</small> 
+                </div>
+            </div>
+            
+            </div>
+            <div class="form-group col-lg-4">
+                <input type="text" name="visitor_state" class="form-control" id="visitor_state" placeholder="Your State*" [(ngModel)]="visitorsdetails.visitor_state" #visitor_state="ngModel" [ngClass]="{'invalid-data': visitor_state.invalid && f.submitted, 'valid-data': visitor_state.valid && f.submitted}" required>
+                <div class="error_msg"
+                *ngIf="visitor_state.errors && (visitor_state.dirty || visitor_state.touched || f.submitted)">
+                <div *ngIf="visitor_state.errors.required">
+                    <small class="error_text" >State is required</small> 
+                </div>
+            </div>
+            
+            </div>
+            <div class="form-group col-lg-4">
+                <input type="text" name="visitor_city" class="form-control" id="visitor_city" placeholder="Your city*" [(ngModel)]="visitorsdetails.visitor_city" #visitor_city="ngModel" [ngClass]="{'invalid-data': visitor_city.invalid && f.submitted, 'valid-data': visitor_city.valid && f.submitted}" required>
+                <div class="error_msg"
+                *ngIf="visitor_city.errors && (visitor_city.dirty || visitor_city.touched || f.submitted)">
+                <div *ngIf="visitor_city.errors.required">
+                    <small class="error_text" >City is required</small> 
+                </div>
+            </div>
+            
+            </div>
+            <div class="form-group col-lg-4">
+                <input type="text" name="visitor_pincode" class="form-control" id="visitor_pincode" placeholder="Your pincode*" [(ngModel)]="visitorsdetails.visitor_pincode" #visitor_pincode="ngModel" [ngClass]="{'invalid-data': visitor_pincode.invalid && f.submitted, 'valid-data': visitor_pincode.valid && f.submitted}" pattern="[- +()0-9]+" required>
+                <div class="error_msg"
+                *ngIf="visitor_pincode.errors && (visitor_pincode.dirty || visitor_pincode.touched || f.submitted)">
+                <div *ngIf="visitor_pincode.errors.required">
+                    <small class="error_text" >Pincode is required</small> 
+                </div>
+                <div *ngIf="visitor_pincode.errors.pattern">
+                    <small class="error_text" >Only Numbers allowed</small> 
+                </div>
+            </div>
+            
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="form-group col-lg-6">
+                <select class="form-control" name="visitor_subject" id='visitor_subject' [(ngModel)]="visitorsdetails.visitor_subject" #visitor_subject="ngModel" [ngClass]="{'invalid-data': visitor_subject.invalid && f.submitted, 'valid-data': visitor_subject.valid && f.submitted}" required>
+                    <option value="">--I want to--*</option>
+                    <option>attend fellowship/events</option>
+                    <option>join a Bible study group</option>
+                    <option>Know more</option>
+                    <option>Share prayer point</option>
+                    <option>Share praise point</option>
+                </select>
+                <div class="error_msg"
+                *ngIf="visitor_subject.errors && (visitor_subject.dirty || visitor_subject.touched || f.submitted)">
+                <div *ngIf="visitor_subject.errors.required">
+                    <small class="error_text" >Subject is required</small> 
+                </div>
+            </div>
+            </div>
+            <div class="form-group col-lg-6">
+                <input type="text" name="visitor_contact_number" class="form-control" id="visitor_contact_number" placeholder="Your Phone*" data-rule="minlen:10" data-msg="Phone number must have 10 chars" [(ngModel)]="visitorsdetails.visitor_contact_number" [ngClass]="{'invalid-data': visitor_contact_number.invalid && f.submitted, 'valid-data': visitor_contact_number.valid && f.submitted}" #visitor_contact_number="ngModel" pattern="[- +()0-9]+" required />
+                <div class="error_msg"
+                *ngIf="visitor_contact_number.errors && (visitor_contact_number.dirty || visitor_contact_number.touched || f.submitted)">
+                <div *ngIf="visitor_contact_number.errors.pattern">
+                    <small class="error_text" >Only Numbers allowed</small> 
+                </div>
+                <div *ngIf="visitor_contact_number.errors.required">
+                    <small class="error_text" >Phone Number is required</small> 
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <textarea class="form-control" name="message" rows="5" id='message' placeholder="Message*" [(ngModel)]="visitorsdetails.message" [ngClass]="{'invalid-data': message.invalid && f.submitted, 'valid-data': message.valid && f.submitted}" #message="ngModel" required></textarea>
+            <div class="error_msg"
+                *ngIf="message.errors && (message.dirty || message.touched || f.submitted)">
+                <div *ngIf="message.errors.required">
+                    <small class="error_text" >Message is required</small> 
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class='btn btn-primary'>Send Message</button>
+            <!-- (click)='visitorDetails($event)' -->
+        </div>
+    </form>
+</div>

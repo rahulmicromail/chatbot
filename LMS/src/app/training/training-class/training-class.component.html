@@ -1,0 +1,345 @@
+<div class="backdrop" [ngStyle]="{'display':displayClassModal}"></div>
+<div class="backdrop" [ngStyle]="{'display':displayClassLessonModal}"></div>
+
+<div class="wrapper container-fluid mb-5 page-container">
+    <div class="main">
+        <main class="content">
+            <h1 class="h3 mb-3">
+                Class Details 
+                <button class='btn btn-primary float-right' (click)='openClassModal()' [ngStyle]="{'display':displayTable}">Add Class</button>
+                <button class='btn btn-primary float-right' id='showall' (click)='changeAllPagination("load")' [ngStyle]="{'display':displayTable}" *ngIf="role_name == 'Admin'">Show All Classes</button>
+                <button class='btn btn-primary float-right' (click)='closeClassListDiv()' [ngStyle]="{'display':displayClassListModal}">Back to the List</button>
+                <button class='btn btn-primary float-right' (click)='closeMenteeDiv()' [ngStyle]="{'display':displayMenteeModal}">Back to the List</button>
+                <button class='btn btn-primary float-right' (click)='addMentees()' [ngStyle]="{'display':displayMenteeModal}" style='margin-right:15px;'>Add Mentees</button>
+            </h1>
+            <div class="row">
+                <div class='col-md-12' style='margin:25px 0;'>
+                    <div class="card">
+                        <div class='category-table card-body' [ngStyle]="{'display':mainTable}">
+                            <table class='table-bordered table m-0' [ngStyle]="{'display':displayTable}">
+                                <thead>
+                                    <tr>
+                                        <th>Course</th>
+                                        <th>Class Name</th>
+                                        <th>Created On</th>
+                                        <th>Start date</th>
+                                        <th>End Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor='let list of classlist | paginate: {itemsPerPage:10, currentPage: p}'>
+                                    <tr *ngIf='classlist.length == 0'>
+                                        <td class='table-thumbnail-img' colspan='7'>
+                                            <h4 style='text-align: center;margin-top: 15px;color: #630460;'>No Data to be displayed</h4>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{list.course_name}}</td>
+                                        <td>{{list.class_name}}</td>
+                                        <td>{{list.class_created_on | date:'dd/MM/yyyy, h:mm a'}}</td>
+                                        <td>{{list.start_date | date:'dd/MM/yyyy, h:mm a'}}</td>
+                                        <td>{{list.end_date | date:'dd/MM/yyyy, h:mm a'}}</td>
+                                        <td>
+                                            <span [ngClass] = "list.class_status == 'Y' ? 'label label-success' : 'label label-danger'">
+                                                <span *ngIf='list.class_status == "Y"'>Enable</span>
+                                                <span *ngIf='list.class_status == "N"'>Disable</span>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class='action-img-div action-edit'>
+                                                <img src='assets/img/edit.png' class='action-img' (click)='editClass(list.class_id);' />
+                                            </div>
+
+                                            <div class='action-img-div action-edit-lesson'>
+                                                <img src='assets/img/edit-class.png' class='action-img' (click)='editClassLessonBox(list.class_id);' />
+                                            </div>
+
+                                            <label class="switch">
+                                                <input type="checkbox" [attr.checked]="list.class_status == 'Y' ? true : null" (change)='changeStatus($event,list.class_id,"individual")' />
+                                                <span class="slider round"></span>
+                                            </label> 
+
+                                            <!-- <div class='action-img-div'>
+                                                <img src='assets/img/add-user.png' class='action-img' (click)='getMentees(list.class_id,list.course_id,list.category_id);' style='margin-right:5px;' />
+                                            </div> -->
+
+                                            <!-- <div class='action-img-div switch'>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [attr.checked]="list.class_status == 'Y' ? true : null" (change)='changeStatus($event,list.class_id,"individual")' />
+                                                </div>
+                                            </div> -->
+
+                                            <!-- <div class='action-img-div'>    
+                                                <img src='assets/img/user-toggle.png' class='action-img' (click)='toggleUser(list.class_id);' />
+                                            </div>  -->                                         
+                                        </td>
+                                    </tr>
+                                    <tr id='row{{list.class_id}}' class='table-hidden-row'>
+                                        <td colspan='7'>
+                                            <div class='row px-3'>
+                                                <div class='col-md-12' *ngIf='class_user.length == 0'>
+                                                    <h3 class='no-data-added'>No Mentees added to the Class
+                                                        <i class="fa fa-times closeToggle" (click)='closeToggle(list.class_id)' aria-hidden="true"></i>
+                                                    </h3>
+                                                </div>
+                                                <div class='col-md-12' *ngIf='class_user.length > 0'>
+                                                    <h3>The mentess added to this Class are :- 
+                                                        <i class="fa fa-times closeToggle" (click)='closeToggle(list.class_id)' aria-hidden="true"></i>
+                                                    </h3>
+                                                </div>
+                                                <div class='col-md-4' *ngFor='let userlist of class_user'>
+                                                    <div class='user-class-list'>
+                                                        {{userlist.mentee_first_name}} {{userlist.mentee_last_name}}
+                                                        <i class="fa fa-times closeToggle" (click)='removeMentee(userlist.row_id)' aria-hidden="true"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class='row px-3'>
+                                                <div class='col-md-12' *ngIf='lesson.length == 0'>
+                                                    <h3 class='no-data-added mt-20'>No Lessons are added to this Class</h3>
+                                                </div>
+                                                <div class='col-md-12' *ngIf='lesson.length > 0'>
+                                                    <h3 class='mt-20'>The Lessons for this Class are :- </h3>
+                                                </div>
+                                                <div class='col-md-4' *ngFor='let lesslist of lesson'>
+                                                    <div class='lesson-class-list clearfix' id='lesson_{{list.class_id}}_{{lesslist.row_id}}' (click)='updateLessonStatus(lesslist.row_id,list.class_id);'>
+                                                        <span>{{lesslist.lesson_name}}</span> 
+                                                        <span><i class="fa fa-check" aria-hidden="true" ></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <ul class="pagination clearfix float-right" [ngStyle]="{'display':displayTable}">
+                                <li class="page-item"><a (click)="previousClick()" class="page-link">Previous</a></li>
+                                <li *ngFor='let index of pageIndexes' class="page-item">
+                                    <a (click)="changePagination(index)" id='pagination_{{index}}' class="page-link"> {{index}} </a>
+                                </li>
+                                <li class="page-item"><a (click)="nextClick()" class="page-link">Next</a></li>
+                            </ul>
+                            <div class="row" [ngStyle]="{'display':displayMenteeModal}">
+                                <div class="col-md-6">
+                                    <div class="drag-container">
+                                        <div class="section-heading">Members <span id='user_cnt'> </span></div>
+                                        <div cdkDropList #pendingList="cdkDropList" [cdkDropListData]="todo" [cdkDropListConnectedTo]="[doneList]" class="item-list" (cdkDropListDropped)="drop($event,'user')">
+                                            <div class="item-box" *ngFor="let item of todo" cdkDrag>
+                                                <span class='fromunit'>{{item.user_first_name}} {{item.user_last_name}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="drag-container">
+                                        <div class="section-heading">Mentees <span id='present_cnt'> </span></div>
+                                        <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="done" [cdkDropListConnectedTo]="[pendingList]" class="item-list" (cdkDropListDropped)="drop($event,'attendees')">
+                                            <div class="item-box" *ngFor="let item of done" cdkDrag>
+                                                <span class='tounit'>{{item.user_first_name}} {{item.user_last_name}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" [ngStyle]="{'display':displayClassListModal}">
+                            <div class='col-md-3 card-parent class-card-child' *ngFor='let list of totalClass | paginate: {itemsPerPage:10, currentPage: p}'>
+                                <div class='class-card'>
+                                    <p class='class-card-name'>{{list.class_name}}</p>
+                                    <div class='card-child'>
+                                        <p>{{list.course_name}}</p>
+                                        <p>{{list.user_first_name}} {{list.user_last_name}}</p>
+                                        <p>{{list.start_date | date:'dd/MM/yyyy'}} TO {{list.end_date | date:'dd/MM/yyyy'}}</p>
+                                        <p class='clearfix'>
+                                            <span class='editLessonBox'>
+                                                <img src='assets/img/edit.png' class='action-img' (click)='editClassLessonBox(list.class_id);' />
+                                            </span>
+
+                                            <span class='all-status' [ngClass] = "list.class_status == 'Y' ? 'label label-success' : 'label label-danger'">
+                                                <span *ngIf='list.class_status == "Y"'>Enable</span>
+                                                <span *ngIf='list.class_status == "N"'>Disable</span>
+                                            </span>
+
+                                            <span class="form-check all-switch form-switch">
+                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [attr.checked]="list.class_status == 'Y' ? true : null" (change)='changeStatus($event,list.class_id,"all")' />
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-12 w-100 clearfix'>
+                                <ul class="pagination float-right">
+                                    <li class="page-item"><a (click)="previousAllClick()" class="page-all-link">Previous</a></li>
+                                    <li *ngFor='let index of pageAllIndexes' class="page-item">
+                                        <a (click)="changeAllPagination(index)" id='pagination_all_{{index}}' class="page-all-link"> {{index}} </a>
+                                    </li>
+                                    <li class="page-item"><a (click)="nextAllClick()" class="page-all-link">Next</a></li>
+                                </ul>
+                            </div>                               
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div class="modal" id="addClassModal" [ngStyle]="{'display':displayClassModal}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" *ngIf='!edit'>Add Class</h5>
+                <h5 class="modal-title" *ngIf='edit'>Edit Class</h5>
+                <button class="close" data-dismiss="modal"(click)='closeClassModal(f);'>
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body p-0">
+                    <div class="col-lg-12">
+                        <form id='class_form' class='row' name='addClassForm' role="form" #f="ngForm" (ngSubmit)="f.form.valid && generateCode(f)">
+                            <div class="form-group col-md-4">
+                                <label for="course_id">Category Name<span style="color: red;">*</span></label>
+                                <select class='form-control' id='cat_id' name='cat_id' (change)="catChange()" [(ngModel)]='class.cat_id' name="cat_id" #cat_id='ngModel' [ngClass]="{'invalid-data': cat_id.invalid && f.submitted, 'valid-data': cat_id.valid && f.submitted}" required>
+                                    <option value='' selected>Select Category Name</option>
+                                    <option value='{{list.row_id}}' *ngFor='let list of catlist'>{{list.category_name}}</option>
+                                </select>
+                                <div class="error_msg" *ngIf="f.submitted && cat_id.invalid">
+                                    <div *ngIf="cat_id.errors.required">
+                                        <small class="error_text"> Category Name is required</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="course_id">Course Name<span style="color: red;">*</span></label>
+                                <select class='form-control' id='course_id' name='course_id' (change)="courseChange($event)" [(ngModel)]='class.course_id' name="course_id" #course_id='ngModel' [ngClass]="{'invalid-data': course_id.invalid && f.submitted, 'valid-data': course_id.valid && f.submitted}" required>
+                                    <option value='' selected>Select Course Name</option>
+                                    <option value='{{list.row_id}}' *ngFor='let list of courselist'>{{list.course_name}}</option>
+                                </select>
+                                <div class="error_msg" *ngIf="f.submitted && course_id.invalid">
+                                    <div *ngIf="course_id.errors.required">
+                                        <small class="error_text"> Course Name is required</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="class_start_date">Class Start Date<span style="color: red;">*</span></label>
+                                <input type="datetime-local" class="form-control" id='class_start_date' [(ngModel)]='class.start_date' name='start_date' placeholder='Enter the class start Date' #start_date='ngModel' [ngClass]="{'invalid-data': start_date.invalid && f.submitted, 'valid-data': start_date.valid && f.submitted}" required />
+                                <div class="error_msg" *ngIf="f.submitted && start_date.invalid">
+                                    <div *ngIf="start_date.errors.required">
+                                        <small class="error_text"> Class Start Date is required</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <button class="btn btn-primary" id='generate_code_btn' *ngIf='generate'> Create Class </button>
+                                <!--  (click)='generateCode()'  -->
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-12">
+                        <form id='class_form' name='addClassForm' role="form" #g="ngForm" (ngSubmit)="g.form.valid && submit(f)">
+                            <div class='row' *ngIf='!generate'> 
+                                <div class="form-group col-md-4">
+                                    <label for="class_end_date">Class End Date<span style="color: red;">*</span></label>
+                                    <!-- <label for="class_end_date">Class End Date</label> -->
+
+                                    <input type="datetime-local" class="form-control" id='class_end_date' [(ngModel)]='class.end_date' name='end_date' #end_date='ngModel' placeholder='Enter the class End Date' [ngClass]="{'invalid-data': end_date.invalid && g.submitted, 'valid-data': end_date.valid && g.submitted}" required />
+                                    <div class="error_msg" *ngIf="g.submitted && end_date.invalid">
+                                        <div *ngIf="end_date.errors.required">
+                                            <small class="error_text"> Class End Date is required</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <label for="class_name">Class Name</label>
+                                    <input type="text" class="form-control" id='class_name' [(ngModel)]='class.class_name' name='class_name' placeholder='Enter the class Name' disabled />
+                                </div>
+                            </div>
+                            
+                            <div class='row' *ngIf='!generate'>
+                                <div class="form-group col-md-4">
+                                    <label for="class_type">Type of Class<span style="color: red;">*</span></label>
+                                    <select class='form-control' id='class_type' name='class_type' [(ngModel)]='class.class_type' #class_type='ngModel' [ngClass]="{'invalid-data': class_type.invalid && g.submitted, 'valid-data': class_type.valid && g.submitted}" required>
+                                        <option value='' selected>Select Class Type</option>
+                                        <option value='online'>Online</option>
+                                        <option value='face to face'>Face To Face</option>
+                                        <option value='blended'>Blended</option>
+                                    </select>
+                                    <div class="error_msg" *ngIf="g.submitted && class_type.invalid">
+                                        <div *ngIf="class_type.errors.required">
+                                            <small class="error_text"> Class Type is required</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <label for="connection_link">Connection Link</label>
+                                    <!-- <label for="connection_link">Connection Link</label> -->
+                                    <input type="text" class="form-control" id='connection_link' [(ngModel)]='class.connection_link' name='connection_link'  placeholder='Enter the Connection link' (change)="includehttp($event)"/>
+                                    <div style="color: red;" *ngIf="checkedhttp == false">Connection link must include http</div> 
+                                    <!-- #connection_link='ngModel' [ngClass]="{'invalid-data': connection_link.invalid && g.submitted, 'valid-data': connection_link.valid && g.submitted}" required 
+                                    <div class="error_msg" *ngIf="g.submitted && connection_link.invalid">
+                                        <div *ngIf="connection_link.errors.required">
+                                            <small class="error_text"> Connection Link is required</small>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                            
+                            <div class='row' *ngIf='!generate'>
+                                <div class="form-group col-md-12">
+                                    <label for="description">Description<span style="color: red;">*</span></label>
+                                    <textarea rows='5' class='form-control' id='description' [(ngModel)]='class.description' name='description' placeholder='Enter the class description' #description='ngModel' name="description" [ngClass]="{'invalid-data': description.invalid && g.submitted, 'valid-data': description.valid && g.submitted}" required></textarea>
+                                    <div class="error_msg" *ngIf="g.submitted && description.invalid">
+                                        <div *ngIf="description.errors.required">
+                                            <small class="error_text">Description is required</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class='row' *ngIf='!generate'>
+                                <div class="form-group col-md-4">
+                                    <button class="btn btn-primary" id='addClass'   *ngIf='!edit'> Add class </button>
+                                    <!-- (click)='addClass($event)' -->
+                                    <button class="btn btn-primary" id='updateClass'  *ngIf='edit'> Update class </button>
+                                    <!-- (click)='updateClass($event)' -->
+                                    <span>&nbsp; &nbsp;&nbsp;&nbsp;</span>
+                                    <span class='btn-primary btn bg-orange'  id='cancel_category' (click)=" resetForm(f,g)" >Cancel </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="showClassLessonModal" [ngStyle]="{'display':displayClassLessonModal}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Update Lessons Activity</h5>
+                <button class="close" data-dismiss="modal"(click)='closeClassLessonModal();'> <span>&times;</span> </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class='row lesson-box w-100'>
+                        <div class='col-md-4' *ngFor='let lesslist of class_lesson'>
+                            <div class='lesson-class-list lesson-class-list_{{lesslist.class_id}} clearfix' id='classlesson_{{lesslist.class_id}}_{{lesslist.row_id}}' (click)='updateClassLessonStatus(lesslist.row_id,lesslist.class_id);'>
+                                <span>{{lesslist.lesson_name}}</span> 
+                                <span><i class="fa fa-check" aria-hidden="true" ></i></span>
+                            </div>
+                        </div>
+                        <div class='col-md-12 text-center' *ngIf='class_lesson.length == 0'>
+                            <h4>No Lessons to be displayed</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

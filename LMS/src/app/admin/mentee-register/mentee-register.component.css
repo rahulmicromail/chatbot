@@ -1,0 +1,11 @@
+.mentee-register-container{overflow-x:hidden;}
+label,h5{color:#333;}
+h5{text-align:center;}
+.mentee-left-container{background-image:url('../../../assets/img/bible.jpg');min-height:100vh;background-position: center;}
+.mentee-left-container{position:relative;}
+.mentee-left-container img{width:135px;position:absolute;top:30%;left:45%;}
+.mentee-register-container{margin: 0 auto;padding: 0;}
+.mentee-right-container{padding:0;}
+/*body,html{overflow-x:hidden;}*/
+.card-header{border:1px solid #e0e0e0;padding: 12px;font-weight: 600;background: linear-gradient(45deg, #1de099, #1dc8cd);color: #fff;margin-bottom: 20px!important;}
+#first_name,#last_name{text-transform:capitalize;}

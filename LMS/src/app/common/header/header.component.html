@@ -1,0 +1,200 @@
+<div class="backdrop" [ngStyle]="{'display':displayLogin}"></div>
+<!-- <div class="demo"></div> -->
+
+
+<header id="header" class="fixed-top align-items-center">
+    <div class="container d-flex align-items-center">
+        <span *ngIf="loggeduser" id='header-user-icon'>
+            <span (click)='toggleHeaderMenu()' id='name_initials' class="tooltip" style='cursor:pointer;'> 
+                {{f_nme}}{{l_nme}}
+                <span class="tooltiptext">{{this.tk.first_name}} {{this.tk.last_name}}</span>
+            </span>
+            <ul id='user-action' *ngIf="classApplied == true">
+                <li><a href='/profile'>My Profile</a></li>
+                <hr />
+                <li><a href='#' (click)='logOut()'>Logout</a></li>
+            </ul>
+        </span>
+        <nav id="navbar" class="navbar">
+            <ul [class.active]="classtoggle">
+                <li><a href="/home">Home</a>
+               </li>          
+                <li *ngIf="!loggeduser"><a class="nav-link" (click)='openLoginModal()'>Login</a></li>
+
+
+                <li *ngIf="loggeduser && role_name == 'Admin'"><a class="nav-link" href='/user'>User</a></li>
+                <li *ngIf="loggeduser && role_name == 'Mentee'"><a class="nav-link" href="/training/dasboard">Dashboard</a></li>
+                <li *ngIf="loggeduser && role_name == 'Mentor'"><a class="nav-link" href="/training/mentor/dasboard">Dashboard</a></li>
+                <li *ngIf="loggeduser && (role_name == 'Mentor' || role_name == 'Mentee')"><a class="nav-link" href="/chat">Chat</a></li>
+                <li *ngIf="loggeduser && role_name == 'Admin'"><a class="nav-link" href="/training/category">Category</a></li>
+                <li *ngIf="loggeduser && role_name == 'Admin'"><a class="nav-link" href="/training/course">Course</a></li>
+                <li *ngIf="loggeduser && role_name == 'Admin' || role_name == 'Mentor' || role_name == 'Mentee'"><a class="nav-link" href="/training/class">Class</a></li>
+                <li *ngIf="loggeduser && role_name == 'Admin'"><a class="nav-link" href="/training/lesson">Lesson</a></li>
+                <li *ngIf="loggeduser && role_name == 'Admin'"><a class="nav-link" href="/add-assessment">Assessment</a></li>
+                <li *ngIf="loggeduser && role_name == 'Admin'"><a class="nav-link" href="/report">Report</a></li> <!--  -->
+            </ul>
+            
+            <i class="bi bi-list mobile-nav-toggle" (click)="navToggleClass()"></i>
+        </nav><!-- .navbar -->
+    </div>
+</header><!-- End Header -->
+
+<div class="modal" id="login_modal" [ngStyle]="{'display':displayLogin}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body clearfix">
+              
+                <div id="login_form" *ngIf='login'>
+                    <span class='close modal-close' (click)='closeLoginModal()' data-dismiss="modal">&times;</span>
+                    <div class="modal-title text-center">
+                        <h4 class="welcome"><b>Welcome to<img src="../../../assets/img/login.png" alt="">Members Login</b></h4>
+                    </div>
+                    <form  name='addClassForm' role="form" #f="ngForm" (ngSubmit)="f.form.valid && userLogin(f)">
+                        <div class='form-group col-md-12'>
+                            <label for='email_id'>Email ID<span style="color: red;">*</span></label>
+                            <input type='text' class='form-control' id='email_id' name="email" placeholder='Enter your Email ID' [(ngModel)]="userdetails.email" #email='ngModel' [pattern]="emailPattern" [ngClass]="{'invalid-data': email.invalid && f.submitted, 'valid-data': email.valid && f.submitted}"  required/>
+                            <!-- <div class="error_msg"*ngIf="f.submitted && email.invalid"> -->
+                            <div class="error_msg" *ngIf="email.errors && (email.dirty || email.touched || f.submitted)">
+                                <div *ngIf="email.errors.required">
+                                    <small class="error_text"> Email Id is required</small>
+                                </div>
+                                <div *ngIf="email.errors.pattern">
+                                    <small class="error_text" > Email Id is invalid</small> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class='form-group  col-md-12'>
+                            <label for='your_password'>Password<span style="color: red;">*</span></label>
+                            <div class="input-group">
+                                <input type='password' class='form-control' id='your_password' name="pass_word" [type]="hide ? 'password' : 'text'" placeholder='Enter your Password' [(ngModel)]="userdetails.pass_word" #pass_word='ngModel'  [ngClass]="{'invalid-data': pass_word.invalid && f.submitted, 'valid-data': pass_word.valid && f.submitted}" required />
+                                <div class="input-group-addon">
+                                    <i class="fa" [ngClass]="{'fa-eye-slash': !hide, 'fa-eye': hide}"   aria-hidden="true" (click)="toggleFieldTextType()"></i>
+                                </div>
+                            </div>
+                            <div class="error_msg"
+                            *ngIf="f.submitted && pass_word.invalid">
+                                <div *ngIf="pass_word.errors.required">
+                                    <small class="error_text"> Password is required</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='form-group col-md-12'>
+                            <label for='user_login'> &nbsp; </label>
+                            <button class='btn btn-primary' style="width: 70%; margin: auto; display: block;" id='user_login'  >Login</button>
+                            <!-- (click)='userLogin()' -->
+                        </div>
+                    </form>
+                    <div class="fpwd text-center">
+                        <a (click)=fpwd() style='cursor:pointer;color: #630460;font-weight: 600;'>Forgot password ? </a> <span style='color:#000;'>Not registered ? </span> <a (click)=registerUser() style='cursor:pointer;color: #630460;font-weight: 600;'> Sign Up </a> <span style='color:#000;'> here </span>
+                    </div>
+                </div>
+                
+                <div id="fpwd_form" *ngIf='forgot'>
+                    <span class='close modal-close' (click)='closeLoginModal()' data-dismiss="modal">&times;</span>
+                    <div class="modal-title text-center">
+                        <img src="../../../assets/img/login.png" alt="">
+                        <h3 class="fpwd"><b>Forgot Password?</b></h3>
+                        <small>you can reset your password here</small>
+                    </div>
+                    <form  name='addClassForm' role="form" #g="ngForm" (ngSubmit)="g.form.valid && forgotPassword(g)">
+                        <div class='form-group col-md-12'>
+                            <label for='forgot_email_id'>Email ID<span style="color: red;">*</span></label>
+                            <input type='text' class='form-control' id='forgot_email_id' name="email_id" placeholder='Enter your Email ID' [(ngModel)]="forgotpassword.email_id" #email_id='ngModel' [pattern]="emailPattern" [ngClass]="{'invalid-data': email_id.invalid && g.submitted, 'valid-data': email_id.valid && g.submitted}" required/>
+                            <!-- <div class="error_msg"*ngIf=" g.submitted && email_id.invalid"> -->
+                        <div class="error_msg" *ngIf="email_id.errors && (email_id.dirty || email_id.touched || g.submitted)">
+                            <div *ngIf="email_id.errors.required">
+                                <small class="error_text"> Email Id is required</small>
+                            </div>
+                            <div *ngIf="email_id.errors.pattern">
+                                <small class="error_text" > Email Id is invalid</small> 
+                            </div>
+                        </div>
+                        </div>
+                        
+                        <div class='form-group col-md-12'>
+                            <label for='forgot_password'> &nbsp; </label>
+                            <button class='btn btn-primary' style="width: 70%; margin: auto; display: block;" id='forgot_password' >Send My Password</button>
+                            <!-- (click)='forgotPassword()' -->
+                        </div>
+                    </form>
+                </div>
+
+                <div id="register_form" *ngIf='register'>
+                    <span class='close modal-close' (click)='closeLoginModal()' data-dismiss="modal">&times;</span>
+                    <div class="modal-title text-center">
+                        <img src="../../../assets/img/login.png" alt="">
+                        <h3 class="register"><b>Register yourself</b></h3>
+                        <small>at PadahJobs</small>
+                    </div>
+                    <form  name='addClassForm' role="form" #r="ngForm" (ngSubmit)="r.form.valid && registerTheUser(r)">
+                        <div class='form-group col-md-12'>
+                            <label for='register_first_name'>First Name<span style="color: red;">*</span></label>
+                            <input type='text' class='form-control' id='register_first_name' name="register_first_name" placeholder='Enter your First Name' [(ngModel)]="registerForm.register_first_name" #register_first_name='ngModel' [ngClass]="{'invalid-data': register_first_name.invalid && r.submitted, 'valid-data': register_first_name.valid && r.submitted}" required/>
+                            <div class="error_msg" *ngIf="register_first_name.errors && (register_first_name.dirty || register_first_name.touched || r.submitted)">
+                                <div *ngIf="register_first_name.errors.required">
+                                    <small class="error_text">First Name is required</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='form-group col-md-12'>
+                            <label for='register_last_name'>Last Name<span style="color: red;">*</span></label>
+                            <input type='text' class='form-control' id='register_last_name' name="register_last_name" placeholder='Enter your Last Name' [(ngModel)]="registerForm.register_last_name" #register_last_name='ngModel' [ngClass]="{'invalid-data': register_last_name.invalid && r.submitted, 'valid-data': register_last_name.valid && r.submitted}" required/>
+                            <div class="error_msg" *ngIf="register_last_name.errors && (register_last_name.dirty || register_last_name.touched || r.submitted)">
+                                <div *ngIf="register_last_name.errors.required">
+                                    <small class="error_text"> Last Name is required</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='form-group col-md-12'>
+                            <label for='register_contact_number'>Contact Number<span style="color: red;">*</span></label>
+                            <input type='text' class='form-control' id='register_contact_number' name="register_contact_number" placeholder='Enter your Contact Number' [(ngModel)]="registerForm.register_contact_number" #register_contact_number='ngModel' [ngClass]="{'invalid-data': register_contact_number.invalid && r.submitted, 'valid-data': register_contact_number.valid && r.submitted}" required/>
+                            <div class="error_msg" *ngIf="register_contact_number.errors && (register_contact_number.dirty || register_contact_number.touched || r.submitted)">
+                                <div *ngIf="register_contact_number.errors.required">
+                                    <small class="error_text"> Contact Number is required</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='form-group col-md-12'>
+                            <label for='register_email_id'>Email ID<span style="color: red;">*</span></label>
+                            <input type='text' class='form-control' id='register_email_id' name="register_email_id" placeholder='Enter your Email ID' [(ngModel)]="registerForm.register_email_id" #register_email_id='ngModel' [pattern]="emailPattern" [ngClass]="{'invalid-data': register_email_id.invalid && r.submitted, 'valid-data': register_email_id.valid && r.submitted}" required/>
+                            <div class="error_msg" *ngIf="register_email_id.errors && (register_email_id.dirty || register_email_id.touched || r.submitted)">
+                                <div *ngIf="register_email_id.errors.required">
+                                    <small class="error_text"> Email Id is required</small>
+                                </div>
+                                <div *ngIf="register_email_id.errors.pattern">
+                                    <small class="error_text" > Email Id is invalid</small> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class='form-group col-md-12'>
+                            <label for='register_password'>Password<span style="color: red;">*</span></label>
+                            <input type='text' class='form-control' id='register_password' name="register_password" placeholder='Enter your Password' [(ngModel)]="registerForm.register_password" #register_password='ngModel' [ngClass]="{'invalid-data': register_password.invalid && r.submitted, 'valid-data': register_password.valid && r.submitted}" required/>
+                            <div class="error_msg" *ngIf="register_password.errors && (register_password.dirty || register_password.touched || r.submitted)">
+                                <div *ngIf="register_password.errors.required">
+                                    <small class="error_text"> Password is required</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='form-group col-md-12'>
+                            <label for='register_role'>User Role<span style="color: red;">*</span></label>
+                            <select class='form-control' id='register_role' name="register_role" [(ngModel)]="registerForm.register_role" #register_role='ngModel' [ngClass]="{'invalid-data': register_role.invalid && r.submitted, 'valid-data': register_role.valid && r.submitted}" required>
+                                <option value=''>Select Your Role</option>
+                                <option value='9'>Teacher</option>
+                                <option value='10'>Student</option>
+                            </select>
+                            <div class="error_msg" *ngIf="register_role.errors && (register_role.dirty || register_role.touched || r.submitted)">
+                                <div *ngIf="register_role.errors.required">
+                                    <small class="error_text"> Role is required</small>
+                                </div>
+                            </div>
+                        </div>                        
+                        <div class='form-group col-md-12'>
+                            <label for='register'> &nbsp; </label>
+                            <button class='btn btn-primary' style="width: 70%; margin: auto; display: block;" id='register' >Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

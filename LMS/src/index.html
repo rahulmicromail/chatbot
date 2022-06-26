@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Chat Bot</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="icon" type="image/x-icon" href="bot-mini.ico">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,700|Open+Sans:300,300i,400,400i,700,700i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rancho&effect=shadow-multiple|3d-float" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Playfair+Display:400,700,400italic,700italic|Merriweather:300,400italic,300italic,400,700italic' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css2?family=Arizonia&family=Sofia&display=swap" rel="stylesheet">
+    
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css1/fontawesome.css">
+    <link rel="stylesheet" href="assets/css1/templatemo-seo-dream.css">
+    <link rel="stylesheet" href="assets/css1/animated.css">
+  </head>
+<body>
+  <div class="cover">
+    <img src="./assets/bot-mini.png" alt="">
+  </div>
+  <app-root></app-root>
+
+  <script src="assets/script/jquery.min.js"></script>
+  <script src="assets/script/popper.min.js"></script>
+  <script src="assets/script/bootstrap.min.js"></script>
+  <script src="assets/script/aos.js"></script>
+
+  <script src="https://kit.fontawesome.com/1ae15e66ef.js" crossorigin="anonymous"></script>
+  <script src="assets/js1/animation.js"></script>
+  <script src="assets/js1/imagesloaded.js"></script>
+  <script src="assets/js1/custom.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/script/main.js"></script>
+  <script type="text/javascript" src="assets/js1/main.js" ></script>
+<script type="text/javascript" src="assets/js1/constants.js" ></script>
+<script type="text/javascript" src="assets/js1/speech.js" ></script>
+
+  <script data-pace-options='{ "ajax": false }' src="assets/script/pace.min.js"></script>
+  <script>
+    jQuery(document).ready(function(){
+      Pace.on("done", function() {
+        jQuery(".cover").addClass('animated fadeOutRight').fadeOut(1000);
+      });
+    })   
+  </script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<div class="wrapper container mb-5 page-container">
+    <div class="main">
+        <main class="content">
+            <!-- <h1 class="h3 mb-3">Course Category</h1> -->
+            <div class="row">
+                <div class="col-md-5 card p-0">
+                    <div class="card-body h-100 p-0">
+                        <h5 class='mb-3 p-4 font-weight-bold card-header'>Add Category</h5>
+                        <div class='row px-4'>
+                            <form  role="form" #f="ngForm" (ngSubmit)="f.form.valid && submit(f)">
+                                <div class='col-md-12'>
+                                    <div class='form-group'>
+                                        <img [src]='imageToShow' alt="Profile Image" class="img-fluid rounded-circle mb-2" *ngIf='imageToShow' />
+                                        <img src='../../../assets/img/category.png' alt="Profile Image" class="img-fluid rounded-circle mb-2" *ngIf='!imageToShow' />
+                                        <input type="file" name='blog_image' class="form-control custom-file-input" id="blog-image" (change)='selectImage($event)' />
+                                    </div>
+                                </div>
+                                <div class='col-md-12'>
+                                    <div class='form-group'>
+                                        <label for='category_name'>Category Name<span style="color: red;">*</span></label>
+                                        <input type='text' class='form-control' placeholder='Enter Category Name' id='category_name' name="category_name" [(ngModel)]='category.category_name' pattern="^[^-\s][a-zA-Z0-9_\s-]+$"  #category_name='ngModel' [ngClass]="{'invalid-data': category_name.invalid && f.submitted, 'valid-data': category_name.valid && f.submitted}" required/>
+                                        <div class="error_msg" *ngIf="category_name.errors && (category_name.dirty || category_name.touched || f.submitted)">
+                                            <div *ngIf="category_name.errors.required">
+                                                <small class="error_text"> Category Name is required</small>
+                                            </div>
+                                            <div *ngIf="category_name.errors.pattern">
+                                                <small class="error_text"> Category Name is invalid</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                                <div class='col-md-12'>
+                                    <div class='form-group'>
+                                        <label for='people_attended'>Description<span style="color: red;">*</span></label>
+                                        <textarea class='form-control' rows='5' placeholder="Category's Description" name='category_description' [(ngModel)]='category.category_description' #category_description="ngModel" [ngClass]="{'invalid-data': category_description.invalid && f.submitted, 'valid-data': category_description.valid && f.submitted}" required></textarea>
+                                        <div class="error_msg" *ngIf="f.submitted && category_description.invalid">
+                                            <div *ngIf="category_description.errors.required">
+                                                <small class="error_text"> Category description is required</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='col-md-12 mt-3'>
+                                    <div class='form-group'>
+                                        <button class='btn-primary btn' id='add_category' *ngIf='!edit' >Add the Category </button>
+                                        <!-- (click)='addCategory($event)' -->
+                                        <button class='btn-primary btn' id='edit_category' *ngIf='edit' >Update the Category </button>
+                                        <!-- (click)='updateCategory($event)' -->
+                                        <span>&nbsp; &nbsp;&nbsp;&nbsp;</span>
+                                        <span class='btn-primary btn bg-orange'  id='cancel_category' (click)=" resetForm(f)" >Cancel </span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-7'>
+                    <div class="card">
+                        <div class='category-table card-body'>
+                            <table class='table-bordered table mb-0'>
+                                <thead>
+                                    <tr>
+                                        <th>Category Name</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngIf='catlist.length == 0'>
+                                        <td class='table-thumbnail-img' colspan='3'>
+                                            <h4 style='text-align: center;margin-top: 15px;color: #630460;'>No Data to be displayed</h4>
+                                        </td>
+                                    </tr>
+                                    <tr *ngFor='let list of catlist | paginate: {itemsPerPage:10, currentPage: p}'>                                               
+                                        <td>{{list.category_name}}</td>
+                                        <td>
+                                            <span [ngClass] = "list.category_status == 'Y' ? 'label label-success' : 'label label-danger'">
+                                                <span *ngIf='list.category_status == "Y"'>Enable</span>
+                                                <span *ngIf='list.category_status == "N"'>Disable</span>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class='action-img-div'>
+                                                <img src='assets/img/edit.png' class='action-img' (click)='editCategory(list.row_id);' />
+                                            </div>
+                                            <!-- <div class='action-img-div switch'>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [attr.checked]="list.category_status == 'Y' ? true : null" (change)='changeStatus($event,list.row_id)' />
+                                                </div>
+                                            </div> -->
+
+                                            <label class="switch">
+                                                <input type="checkbox" [attr.checked]="list.category_status == 'Y' ? true : null"  (change)='changeStatus($event,list.row_id)'>
+                                                <span class="slider round"></span>
+                                            </label>                                           
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <ul class="pagination float-right">
+                                <li class="page-item"><a (click)="previousClick()" class="page-link">Previous</a></li>
+                                <li *ngFor='let index of pageIndexes' class="page-item">
+                                    <a (click)="changePagination(index)" id='pagination_{{index}}' class="page-link"> {{index}} </a>
+                                </li>
+                                <li class="page-item"><a (click)="nextClick()" class="page-link">Next</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+

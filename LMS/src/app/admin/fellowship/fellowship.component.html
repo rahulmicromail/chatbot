@@ -1,0 +1,166 @@
+<div class="backdrop" [ngStyle]="{'display':viewdisplay}"></div>
+<div class="backdrop" [ngStyle]="{'display':display}"></div>
+
+<div class='calendar-parent-container container my-5' style='margin-top:100px!important;'>
+    <button id='add_event_btn' *ngIf="access.calendar_add_access == 1 || role_name == 'Admin'" class='btn btn-primary float-right bg-orange' (click)='openModal()'>Add Calendar</button>
+    <full-calendar id='calendar' [options]="calendarOptions" deepChangeDetection="true" class='mt-5'></full-calendar>
+</div>
+
+<div id="viewModal" class="modal" role="dialog" [ngStyle]="{'display':viewdisplay}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class='row px-4'>
+                    <span class='close modal-close' (click)='closeModal(f)' data-dismiss="modal">&times;</span>
+                    <div class='col-md-12 p-0' *ngIf='typeisevent'>
+                        <img [src]='imageToShow' class='w-100' *ngIf='imageToShow' />
+                        <!-- <img src='../../../assets/img/news-1.jpg' class='w-100' /> -->
+                    </div>
+                    <div class='col-md-12'>
+                        <h3>{{event.event_name}}</h3>
+                    </div>
+                    <div class='col-md-6'>
+                        <div class='form-group'>
+                            <label for='mentee_email_id'>Event Start date</label> 
+                            <p>{{event.event_start_date}}</p>
+                        </div>
+                    </div>
+                    <div class='col-md-6'>
+                        <div class='form-group'>
+                            <label for='mentee_email_id'>Event End date</label> 
+                            <p>{{event.event_end_date}}</p>
+                        </div>
+                    </div>
+                    <div class='col-md-4' *ngIf='event.EventType'>
+                        <div class='form-group'>
+                            <label for='mentor_email_id'>Event Type</label> 
+                            <p>{{event.EventType}}</p>
+                        </div>
+                    </div>
+                    <div class='col-md-4' *ngIf='event.cost_per_person'>
+                        <div class='form-group'>
+                            <label for='mentor_email_id'>Cost per person</label> 
+                            <p>{{event.cost_per_person}}</p>
+                        </div>
+                    </div>
+                    <div class='col-md-4' *ngIf='event.connection_link'>
+                        <div class='form-group'>
+                            <label for='connection_link'>Connection Link</label>
+                            <p>{{event.connection_link}}</p>
+                        </div>
+                    </div>
+                    <div class='col-md-12'>
+                        <div class='form-group'>
+                            <label for='mentor_email_id'>Venue Details</label> 
+                            <p>{{event.venue_name}}</p>
+                        </div>
+                    </div>
+                    <div class='col-md-12'>
+                        <div class='form-group'>
+                            <label for='mentor_email_id'>Event Description</label> 
+                            <p>{{event.description}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+
+<div id="myModal" class="modal" role="dialog" [ngStyle]="{'display':display}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5 class='mb-3 card-header'>
+                    <span>Add Calendar</span>
+                    <span class='close modal-close' (click)='closeModal(f)' data-dismiss="modal">&times;</span>
+                </h5>
+                <div class='px-4'>
+                    <form  role="form" #f="ngForm" (ngSubmit)="f.form.valid && addEvent(f)">
+                        <div class='col-md-6'>
+                            <div class='form-group'>
+                                <label for='event_name'>Event Name<span style="color: red;">*</span></label>
+                                <input type='text' placeholder='Event Name' name='event_name' class='form-control' id='event_name' pattern="[a-zA-Z0-9]+(?:\s+[a-zA-Z]+)*$"  [(ngModel)]='event.event_name' #event_name= 'ngModel' [ngClass]="{'invalid-data': event_name.invalid && f.submitted, 'valid-data': event_name.valid && f.submitted}"  required  />
+                                <div class="error_msg"
+                                    *ngIf="event_name.errors && (event_name.dirty || event_name.touched || f.submitted)">
+                                    <div *ngIf="event_name.errors.required">
+                                        <small class="error_text" >Event Name is required</small> 
+                                    </div>
+                                    <div *ngIf="event_name.errors.pattern">
+                                        <small class="error_text" >Event Name is invalid</small> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-6'>
+                            <div class='form-group'>
+                                <label for='event_start_date'>Event Start Date<span style="color: red;">*</span></label>                      
+                                <input type='datetime-local' name='event_start_date' placeholder='Event Start Date' class='form-control' id='event_start_date' [(ngModel)]="event.event_start_date" min='{{startDate}}' (change)='startDteChange()'  #event_start_date= 'ngModel' [ngClass]="{'invalid-data': event_start_date.invalid && f.submitted, 'valid-data': event_start_date.valid && f.submitted}"  required />
+                                <div class="error_msg"
+                                    *ngIf="f.submitted && event_start_date.invalid">
+                                    <div *ngIf="event_start_date.errors.required">
+                                        <small class="error_text" >Event Start Date is required</small> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-6'>
+                            <div class='form-group'>
+                                <label for='event_end_date'>Event End Date<span style="color: red;">*</span></label> 
+                                <input type='datetime-local' name='event_end_date' placeholder='Event End Date' class='form-control' min='{{endDate}}' id='event_end_date' [(ngModel)]='event.event_end_date' #event_end_date= 'ngModel' [ngClass]="{'invalid-data': event_end_date.invalid && f.submitted, 'valid-data': event_end_date.valid && f.submitted}"  required />
+                                <div class="error_msg" *ngIf="f.submitted && event_end_date.invalid">
+                                    <div *ngIf="event_end_date.errors.required">
+                                        <small class="error_text" >Event End Date is required</small> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-8'>
+                            <div class='form-group'>
+                                <label for='select_venue'>Venue Name<span style="color: red;">*</span></label>
+                                <textarea id='select_venue' name='event_venue' class='w-100 form-control' placeholder='Enter your Venue Details' rows='3' [(ngModel)]='event.venue_name' pattern="[a-zA-Z0-9]+(?:\s+[a-zA-Z]+)*$"  #venue_name= 'ngModel' [ngClass]="{'invalid-data': venue_name.invalid && f.submitted, 'valid-data': venue_name.valid && f.submitted}"  required></textarea>
+                                <div class="error_msg" *ngIf="venue_name.errors && (venue_name.dirty || venue_name.touched || f.submitted)">
+                                    <div *ngIf="venue_name.errors.required">
+                                        <small class="error_text" >Venue Name is required</small> 
+                                    </div>
+                                    <div *ngIf="venue_name.errors.pattern">
+                                        <small class="error_text" >Venue Name is invalid</small> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-4'>
+                            <div class='form-group'>
+                                <label for='connection_link'>Connection Link</label>
+                                <input type='text' placeholder='Enter the connection Link' name='connection_link' class='form-control' id='connection_link' [(ngModel)]='event.connection_link' (change)="includehttp($event)" />
+                                <div style="color: red;" *ngIf="checkedhttp == false">Connection link must include http</div> 
+                                <!-- <div class="error_msg" *ngIf="f.submitted && connection_link.invalid">
+                                    <div *ngIf="connection_link.errors.required">
+                                        <small class="error_text" >Connection Link is required</small> 
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class='col-md-12'>
+                            <div class='form-group'>
+                                <label for='event_description'>Event Description<span style="color: red;">*</span></label>
+                                <textarea placeholder='Event Description' class='w-100 form-control' id='event_description' name='event_desc' rows='4' [(ngModel)]='event.description' #description= 'ngModel' [ngClass]="{'invalid-data': description.invalid && f.submitted, 'valid-data': description.valid && f.submitted}"  required></textarea>
+                                <div class="error_msg" *ngIf="f.submitted && description.invalid">
+                                    <div *ngIf="description.errors.required">
+                                        <small class="error_text" >Event Description is required</small> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-6'>
+                            <div class='form-group'>
+                                <label for='submit_btn'> &nbsp; </label>                        
+                                <button id='submit_btn' class='btn btn-primary'>Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>

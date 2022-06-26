@@ -1,0 +1,119 @@
+.course-img{width: 40%;height: 170px;background-repeat: no-repeat;background-position: center;background-size: cover;border-right: 1px solid #e0e0e0;display:inline-block;border-top-left-radius: 5px;border-bottom-left-radius: 5px;}
+.course-dtls{width:60%;display:inline-block;padding: 10px;}
+.course-card{border: 1px solid #e0e0e0;box-shadow: 0 0 6px #e0e0e0;border-radius: 5px;}
+.course-action .label{border-radius: 100%;margin-right: 10px;padding: 7px 9px;cursor:pointer;}
+.course-name{font-weight:600;}
+.wrapper{margin-top:20px;}
+.course-dtls p{display: block;display: -webkit-box !important;max-width: 100%;height:65px;margin: 0 auto;font-size: 14px;line-height:1.6;-webkit-line-clamp:3;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;}
+.course-name{display: block;display: -webkit-box;max-width: 100%;height:20px;font-size: 14px;line-height:1.6;-webkit-line-clamp:1;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;margin-bottom:10px;}
+.class-name{font-size: 13px!important;font-weight: 600;color: #2a4689;display: block;display: -webkit-box!important;max-width: 100%;height:18px;margin: 0 auto;font-size: 14px;line-height: 1.5;-webkit-line-clamp: 1;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;margin: 0 0 5px;-webkit-line-clamp: 1;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;white-space: normal;word-break: break-all;}
+.course-action{margin-top:10px;}
+.class-nme-div{background-color:#f8f8f8;padding: 20px;border-top-left-radius:5px;border-top-right-radius:5px;border:#f8f8f8;margin:20px 0 0;cursor:pointer;border-bottom:1px solid #e0e0e0;}
+.class-div-hide,.lesson-div-hide{display:none;padding:20px;border:1px solid #f8f8f8;border-bottom-left-radius:5px;border-bottom-right-radius:5px;}
+.class-nme-div span{text-transform:capitalize;font-weight:600;margin-right:20px;}
+.class-nme-div label.active,.class-nme-div label.inactive{border-radius: 50%;padding: 6px 9px;font-size: 13px;cursor:pointer;background-color: #630460;}
+label.inactive{pointer-events: none;opacity: 0.2;}
+.class-container{box-shadow: 0 0 6px #e0e0e0;}
+.lesson-dtls h6{background-color: #e0e0e0;padding: 10px;font-weight: 500;margin-bottom: 0;}
+.lesson-dtls p{padding: 10px;}
+.mr-10 {margin-right: 10px;}
+.course-card{margin-bottom: 25px;}
+.label-success{padding: 3px 5px;}
+.menteestatus{text-align:center;color:crimson;}
+.lesson-dtls h6{margin-bottom: 8px;}
+.label-success,.label-danger{font-size: 11px;}
+.lessons-details.pointer-none{pointer-events: none;opacity: 0.7;}
+.page-container{margin-top:20px}
+.label-primary {background-color: #1dc9cb;}
+.label-common {background-color: #1ddf9c;}
+.add-notes img{cursor:pointer;width:35px;height:35px;}
+.add-notes{position:fixed;right:25px;bottom:25px;}
+#cke_editor1,.cke_chrome{display:none!important;visibility:hidden!important;}
+.notes-box{position:relative;cursor:pointer;border:1px solid #e0e0e0;border-radius:5px;padding:10px;transition: 0.8s;}
+.notes-box p{margin:0;font-size:12px;}
+.notes-box ~ .fa-trash{position:absolute;top:5px;right:20px;z-index:10;cursor:pointer;}
+.notes-box:hover{box-shadow:6px 8px 10px 0 #ccc;}
+
+/* .lesson-container{position:relative;overflow-y:auto;max-height:80vh;}
+.lesson-container {--scrollbarBG: #CFD8DC;--thumbBG: #90A4AE;}
+.lesson-container::-webkit-scrollbar {width: 11px;}
+.lesson-container {scrollbar-width: thin;scrollbar-color: var(--thumbBG) var(--scrollbarBG);}
+.lesson-container::-webkit-scrollbar-track {background: var(--scrollbarBG);}
+.lesson-container::-webkit-scrollbar-thumb {background-color: var(--thumbBG) ;border-radius: 6px;border: 3px solid var(--scrollbarBG);} */
+
+.lesson-container{position:relative;}
+.video-lsn{color: #1dde9d;text-decoration: underline!important;font-weight: 700;cursor:pointer;
+    display:block;}
+@page{
+    size:A4 portrait;
+    margin:10mm;
+}
+/* #certificate{
+    margin:0;
+    padding:0;
+    border:1mm solid #991B1B;
+    height:188mm;
+    position:relative;
+    top:-200%;
+}*/
+.border-pattern{
+    position:absolute;
+    left:4mm;
+    top:-500vh;
+    height:200mm;
+    width:267mm;
+    border:1mm solid #991B1B;
+    /* http://www.heropatterns.com/ */
+    background-color: #d6d6e4;
+    background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h16v2h-6v6h6v8H8v-6H2v6H0V0zm4 4h2v2H4V4zm8 8h2v2h-2v-2zm-8 0h2v2H4v-2zm8-8h2v2h-2V4z' fill='%23991B1B' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+.certificate-content{
+    position:absolute;
+    left:10mm;
+    top:10mm;
+    height:178mm;
+    width:245mm;
+    border:1mm solid #991B1B;
+    background:white;
+}
+.certificate-inner-content{
+    border:1mm solid #991B1B;
+    margin:4mm;
+    padding:10mm;
+    height:148mm;
+    text-align:center;
+}
+#certificate h1{
+    text-transform:uppercase;
+    font-size:48pt;
+    margin-bottom:0;
+}
+#certificate h2{
+    font-size:24pt;
+    margin-top:0;
+    padding-bottom:1mm;
+    display:inline-block;
+    border-bottom:1mm solid #991B1B;
+}
+#certificate h2::after{
+    content:"";
+    display:block;
+    padding-bottom:4mm;
+    border-bottom:1mm solid #991B1B;
+}
+#certificate h3{
+    font-size:20pt;
+    margin-bottom:0;
+    margin-top:10mm;
+}
+#certificate p{
+    font-size:16pt;
+}
+.badge{
+    width:40mm;
+    height:40mm;
+    position:absolute;
+    right:10mm;
+    bottom:10mm;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z' /%3E%3C/svg%3E");
+}

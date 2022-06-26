@@ -1,0 +1,287 @@
+<div class="backdrop" [ngStyle]="{'display':display}"></div>
+<div class="backdrop" [ngStyle]="{'display':statusModaldisplay}"></div>
+
+<div class="wrapper container">
+    <div class="main">
+        <main class="content">
+            <div class="container-fluid p-0">
+                <ul class='users-tabs w-100'>
+                    <li class='users-tab-list d-inline-block teacher active' (click)="openTabContent('teacher')">Teacher</li>
+                    <li class='users-tab-list d-inline-block student' (click)="openTabContent('student')">Student</li>
+                    <li class='users-tab-list d-inline-block pending' (click)="openTabContent('pending')">Approval Pending</li>
+                </ul>
+                
+                <div class='user-tab-content' id='teacher'>
+                    <div class="row">
+                        <div class="col-md-12 clearfix col-xl-12 p-0">
+                            <div class='form-group col-md-4 float-left'>
+                                <label for='search_name'>Name</label>
+                                <input type='text' class='form-control' id='search_name' [(ngModel)]='search.name' placeholder="Enter the User's Name" />
+                            </div>
+                            <div class='form-group col-md-5 float-left'>
+                                <label for='filter' class='w-100'>&nbsp;</label>
+                                <button class='btn btn-blue' id='add_user' (click)='openModal()'>Add</button>
+                                <button class='btn btn-primary' id='filter' (click)='filterUser()'>Filter</button>
+                                <button class='btn bg-orange' id='reset' style='margin-left:10px;' (click)="resetFilter('mentor')">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xl-12">
+                            <div class="card">
+                                <div class="card-body h-100">
+                                    <table class='table-bordered table'>
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Joining Date</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let user of userlist | paginate: {itemsPerPage:10, currentPage: p}">
+                                            <tr>
+                                                <td>{{user.user_first_name}} {{user.user_last_name}}</td>
+                                                <td>{{user.user_created_date  | date:'dd/MM/yyyy'}}</td>
+                                                <td><span [ngClass] = "user.status == 'Enable' ? 'label label-success' : 'label label-danger'"> {{user.status}} </span></td>
+                                                <td>
+                                                    <div class='action-img-div'>
+                                                        <img src='assets/img/edit.png' class='action-img' (click)="editUser(user.user_id,'mentor');" />
+                                                    </div>                                              
+                                                    <div class='action-img-div'>
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [attr.checked]="user.status == 'Enable' ? true : null" (change)='openStatusModal($event,user.user_id,"mentor")' />
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <ul class="pagination float-right" *ngIf='!filter'>
+                                        <li class="mentor-page-item page-item"><a (click)="previousClick()" class="mentor-page-link page-link">Previous</a></li>
+                                        <li *ngFor='let index of pageIndexes' class="mentor-page-item page-item">
+                                            <a (click)="fetchUser(index)" id='mentorpagination_{{index}}' class="mentor-page-link page-link"> {{index}} </a>
+                                        </li>
+                                        <li class="mentor-page-item page-item"><a (click)="nextClick()" class="mentor-page-link page-link">Next</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='user-tab-content' id='student' style='display:none;'>
+                    <div class="row">
+                        <div class="col-md-12 clearfix col-xl-12 p-0">
+                            <div class='form-group col-md-4 float-left'>
+                                <label for='mentee_search_name'>Name</label>
+                                <input type='text' class='form-control' id='mentee_search_name' [(ngModel)]='search.mentee_name' placeholder="Enter the Mentee's Name" />
+                            </div>
+                            <div class='form-group col-md-5 float-left'>
+                                <label for='filter' class='w-100'>&nbsp;</label>
+                                <button class='btn btn-primary' id='menteefilter' (click)='filterMentee()'>Filter</button>
+                                <button class='btn bg-orange' id='reset' style='margin-left:10px;' (click)="resetFilter('mentee')">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xl-12">
+                            <div class="card">
+                                <div class="card-body h-100">
+                                    <table class='table-bordered table'>
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Joining Date</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let user of studentlist | paginate: {itemsPerPage:10, currentPage: p}">
+                                            <tr>
+                                                <td>{{user.user_first_name}} {{user.user_last_name}}</td>
+                                                <td>{{user.user_created_date  | date:'dd/MM/yyyy'}}</td>
+                                                <td><span [ngClass] = "user.status == 'Enable' ? 'label label-success' : 'label label-danger'"> {{user.status}} </span></td>
+                                                <td>
+                                                    <div class='action-img-div'>
+                                                        <img src='assets/img/edit.png' class='action-img' (click)="editUser(user.user_id,'mentee');" />
+                                                    </div>                                       
+                                                    <div class='action-img-div'>
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [attr.checked]="user.status == 'Enable' ? true : null" (change)='openStatusModal($event,user.user_id,"mentee")' />
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <ul class="pagination float-right" *ngIf='!menteefilter'>
+                                        <li class="mentee-page-item page-item"><a (click)="previousMenteeClick()" class="mentee-page-link page-link">Previous</a></li>
+                                        <li *ngFor='let index of menteepageIndexes' class="mentee-page-item page-item">
+                                            <a (click)="fetchMentees(index)" id='menteepagination_{{index}}' class="mentee-page-link page-link"> {{index}} </a>
+                                        </li>
+                                        <li class="mentee-page-item page-item"><a (click)="nextMenteeClick()" class="mentee-page-link page-link">Next</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='user-tab-content' id='pending' style='display:none;'>
+                    <div class="row">
+                        <div class="col-md-12 clearfix col-xl-12 p-0">
+                            <div class='form-group col-md-4 float-left'>
+                                <label for='user_name'>Name</label>
+                                <input type='text' class='form-control' id='user_name' [(ngModel)]='search.user_name' placeholder="Enter the User's Name" />
+                            </div>
+                            <div class='form-group col-md-5 float-left'>
+                                <label for='filter' class='w-100'>&nbsp;</label>
+                                <button class='btn btn-primary' id='pendingfilter' (click)='filterPendingUser()'>Filter</button>
+                                <button class='btn bg-orange' id='reset' style='margin-left:10px;' (click)="resetFilter('pending')">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xl-12">
+                            <div class="card">
+                                <div class="card-body h-100">
+                                    <table class='table-bordered table' id='pending-table'>
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email ID</th>
+                                                <th>Contact Number</th>
+                                                <th>Registration Date</th>
+                                                <th>Role</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let user of pendinglist | paginate: {itemsPerPage:10, currentPage: p}">
+                                            <tr>
+                                                <td>{{user.user_first_name}} {{user.user_last_name}}</td>
+                                                <td>{{user.user_email_id}}</td>
+                                                <td>{{user.user_contact_number}}</td>
+                                                <td>{{user.user_created_date  | date:'dd/MM/yyyy'}}</td>
+                                                <td>{{user.role_name}}</td>
+                                                <td>
+                                                    <div class='action-img-div'>
+                                                        <img src='assets/img/approve-user.png' class='action-img' (click)="approve(user.user_id, user.role_id);" />
+                                                    </div>                                       
+                                                    <div class='action-img-div'>
+                                                        <img src='assets/img/disapprove-user.png' class='action-img' (click)="disapprove(user.user_id);" />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <ul class="pagination float-right" *ngIf='!pendingfilter'>
+                                        <li class="pending-page-item page-item"><a (click)="previousPendingClick()" class="pending-page-link page-link">Previous</a></li>
+                                        <li *ngFor='let index of pendingpageIndexes' class="pending-page-item page-item">
+                                            <a (click)="fetchPending(index)" id='pendingpagination_{{index}}' class="pending-page-link page-link"> {{index}} </a>
+                                        </li>
+                                        <li class="pending-page-item page-item"><a (click)="nextPendingClick()" class="pending-page-link page-link">Next</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div id="myModal" class="modal" role="dialog" [ngStyle]="{'display':display}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5 class='mb-3 card-header'>
+                    <span *ngIf='!edit'>Add</span>
+                    <span *ngIf='edit'>Edit</span>                 
+                </h5>
+                <input type='hidden' id='hidden_id' />
+                <div class='px-4'>
+                    <span class='close modal-close' (click)='closeModal(f)' data-dismiss="modal">&times;</span>
+                    <form  role="form" class='row' #f="ngForm" (ngSubmit)="f.form.valid && submit(f)"> 
+                        <div class='col-md-6'>
+                            <div class='form-group'>
+                                <label for='mentee_first_name'>First Name<span style="color: red;">*</span></label>
+                                <input type='text' placeholder='First Name' class='form-control' id='mentee_first_name' name="user_first_name" pattern="[a-zA-Z0-9]+(?:\s+[a-zA-Z]+)*$" [(ngModel)]="updateuser.user_first_name" #user_first_name="ngModel" [ngClass]="{'invalid-data': user_first_name.invalid && f.submitted, 'valid-data': user_first_name.valid && f.submitted}" required/>
+                                <div class="error_msg" *ngIf="user_first_name.errors && (user_first_name.dirty || user_first_name.touched || f.submitted)">
+                                    <!-- <small class="error_text"> First Name is required</small> -->
+                                    <div *ngIf="user_first_name.errors.required">
+                                        <small class="error_text" >First Name is required </small>                                        
+                                    </div>
+                                    <div *ngIf="user_first_name.errors.pattern">
+                                        <small class="error_text" >First Name is invalid </small>                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-6'>
+                            <div class='form-group'>
+                                <label for='mentee_last_name'>Last Name<span style="color: red;">*</span></label>                      
+                                <input type='text' placeholder='Last Name' class='form-control' id='mentee_last_name' name="user_last_name" [(ngModel)]="updateuser.user_last_name"  #user_last_name="ngModel"  pattern="[a-zA-Z0-9]+(?:\s+[a-zA-Z]+)*$" 
+                                [ngClass]="{'invalid-data': user_last_name.invalid && f.submitted, 'valid-data': user_last_name.valid && f.submitted}"
+                                required />
+                                <div class="error_msg" *ngIf="user_last_name.errors && (user_last_name.dirty || user_last_name.touched || f.submitted)">
+                                    <div *ngIf="user_last_name.errors.required">
+                                        <small class="error_text" >Last Name is required </small>                                        
+                                    </div>
+                                    <div *ngIf="user_last_name.errors.pattern">
+                                        <small class="error_text" >Last Name is invalid </small>                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-6'>
+                            <div class='form-group'>
+                                <label for='mentee_email_id'>Email ID<span style="color: red;">*</span></label> 
+                                <input type='text' placeholder='Email ID' class='form-control' id='mentee_email_id' name="user_email_id" [(ngModel)]="updateuser.user_email_id"  #user_email_id="ngModel" [ngClass]="{'invalid-data': user_email_id.invalid && f.submitted, 'valid-data': user_email_id.valid && f.submitted}" [pattern]="emailPattern" required [attr.disabled]='edit ? "" : null' />
+                                <div class="error_msg" *ngIf="user_email_id.invalid && f.submitted">
+                                    <div *ngIf="user_email_id.errors.required">
+                                        <small class="error_text"> Email Id is required</small>
+                                    </div>
+                                    <div *ngIf="user_email_id.errors.pattern">
+                                        <small class="error_text" > Email Id is invalid</small> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-6'>
+                            <div class='form-group'>   
+                                <label for='submit_btn' class='w-100'> &nbsp; </label>                
+                                <button id='submit_btn' *ngIf='!edit' class='btn btn-primary'  >Submit</button>
+                                <button id='update_btn' *ngIf='edit' class='btn btn-primary'>Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+
+<div id="statusUpdateModal" class="modal" role="dialog" [ngStyle]="{'display':statusModaldisplay}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5 class='mb-3 card-header'> Update User Status </h5>
+                <div class='px-4'>
+                    <span class='close modal-close' (click)='closeStatusModal(f)' data-dismiss="modal">&times;</span>
+                    <form role="form" #g="ngForm" (ngSubmit)="g.form.valid && changeStatus(g)"> 
+                        <div class='form-group'>
+                            <label for='statuschangereason'>Reason<span style="color: red;">*</span></label>
+                            <textarea id='statuschangereason' class='form-control' rows='5' placeholder='Reason to Activate/Deactivate the user' name='statuschangereason' [(ngModel)]='disableuser.description' #statuschangereason="ngModel" [ngClass]="{'invalid-data': statuschangereason.invalid && g.submitted, 'valid-data': statuschangereason.valid && g.submitted}" required></textarea>
+                            <div class="error_msg" *ngIf="statuschangereason.invalid && g.submitted">
+                                <small class="error_text"> Reason is required to activate / deactivate the user</small>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <button id='update_status_btn' class='btn btn-primary' >Update Status</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>

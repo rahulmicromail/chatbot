@@ -1,0 +1,214 @@
+<div class="backdrop" [ngStyle]="{'display':displayVideoModal}"></div>
+<div class="backdrop" [ngStyle]="{'display':displayAssessmentModal}"></div>
+<app-header> </app-header>
+<img src='../../../assets/img/mentees-banner.jpg' class='mt-5 w-100 h-100' *ngIf="displayTable" />
+<div class="wrapper container mb-5 page-container">
+    <div class="main">
+        <main class="content">
+            <div class="row">
+                <div class="col-md-12 p-0" *ngIf="displayTable">
+                    <div *ngIf='courselist.length > 0'>
+                        <h3 class='mb-3 p-4 font-weight-bold'>Upcoming Classes</h3>                   
+                        <div class='col-md-4' *ngFor='let list of courselist'>
+                            <div class='course-card clearfix'>
+                                <!-- <div class='course-img' style="background-image:url('../../../assets/img/no-img-found-small.png');float:left;"> </div -->
+                                <div class='course-img' style="float:left;">
+                                    <img [src]='list.course_image_url' *ngIf='list.course_image_url' height="100%" style='cursor:pointer;width:100%' />
+                                    <img src='../../../assets/img/no-img-found-small.png' *ngIf='!list.course_image_url' height="100%" style='cursor:pointer;width:100%' />
+                                </div>
+                                <div class='course-dtls' style='float:left;'>
+                                    <h6 class='class-name'>{{list.class_name}}</h6>
+                                    <h6 class='course-name'>{{list.course_name}}</h6>
+                                    <p>{{list.course_description}}</p>
+                                    <div class='course-action'>
+                                        <label class='label label-common' (click)='openCourseDtls(list.course_id,list.row_id,"upcoming")'>
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </label>
+                                        <label class='label label-primary' (click)='addMentee(list.category_id, list.course_id, list.row_id, list.instructor_id)'>
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>                                       
+                </div>
+                <div class="col-md-12 p-0" *ngIf="displayTable" style='margin-top:30px;'>
+                    <div *ngIf='ongoinglist.length > 0'>
+                        <h3 class='mb-3 p-4 font-weight-bold'>Joined Classes</h3>                   
+                        <div class='col-md-4' *ngFor='let list of ongoinglist'>
+                            <div class='course-card clearfix'>
+                                <!-- <div class='course-img' style="background-image:url('../../../assets/img/no-img-found-small.png');float:left;"> </div -->
+                                <div class='course-img' style="float:left;">
+                                    <img [src]='list.course_image_url' *ngIf='list.course_image_url' height="100%" style='cursor:pointer;width:100%' />
+                                    <img src='../../../assets/img/no-img-found-small.png' *ngIf='!list.course_image_url' height="100%" style='cursor:pointer;width:100%' />
+                                </div>
+                                <div class='course-dtls' style='float:left;'>
+                                    <h6 class='class-name'>{{list.class_name}}</h6>
+                                    <h6 class='course-name'>{{list.course_name}}</h6>
+                                    <p>{{list.course_description}}</p>
+                                    <div class='course-action'>
+                                        <label class='label label-common' (click)='openCourseDtls(list.course_id,list.row_id,"ongoing")'>
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 p-0" *ngIf="displayMenteeModal" style='margin-top:100px;'>
+                    <!-- div [ngClass]="joinedClass ? 'col-md-9 lesson-container' : 'col-md-12 p-0'" -->
+                    <div class='col-md-12 p-0'>
+                        <div class='btn-div clearfix px-4'>
+                            <button class='btn btn-primary float-right' (click)='closeMenteeDiv()'>Back to the List</button>
+                        </div>
+                        <h5 *ngIf="notes.length > 0" class='px-4 mt-5'>Notes For This Class</h5>
+                        <ul *ngIf="notes.length > 0" class='w-100 clearfix'>
+                            <li class='col-md-3' *ngFor='let list of notes'>
+                                <div class='notes-box' (click)='editNotes(list.row_id)'>
+                                    <b>{{list.title}}</b>
+                                    <p>{{list.added_on | date : "dd MMM, YYYY"}}</p>
+                                </div>
+                                <i class="fa fa-trash" aria-hidden="true" (click)='deleteNotes(list.row_id)'></i>
+                            </li>
+                        </ul>
+                        <p style='margin-top:25px;' class='px-4'>{{details[0].course_description}}</p>
+                        <!-- div class='class-container px-4' *ngFor='let dtls of details' -->
+                        <div class='class-container px-0' *ngFor='let dtls of details'>
+                            <h5 class='class-nme-div' (click)='toggleClass(dtls.class_id)'> 
+                                <span>{{dtls.class_name}}</span>
+                                <label class='label label-success' [ngClass]="dtls.connection_link ? 'active' : 'inactive'" (click)='openLink(dtls.connection_link)' >
+                                    <i class="fa fa-link" aria-hidden="true"></i>
+                                </label>
+                                <label class='label label-danger float-right' *ngIf="dtls.class_status == 'N'"> Disabled </label>
+                            </h5>
+                            <div class='class-div-hide' id='row_{{dtls.class_id}}'>
+                                <h3 class='mentee-status-msg' *ngIf='menteestatus=="N"' style='text-align: center;color: #f14a4a;'>You have been removed from this class</h3>
+                                <div class='lessons-details'>
+                                    <p class='class-desc'>{{dtls.description}}</p>
+                                    <div class='lesson-dtls' *ngFor='let lessondtls of lesson'>
+                                        <h6 (click)='toggleLessonClass(lessondtls.row_id)'>
+                                            {{lessondtls.lesson_name}}                                       
+                                            <label class='label float-right' style='display:none;' id='lesson_{{lessondtls.row_id}}_{{dtls.class_id}}'> Completed </label>
+                                        </h6>
+                                        <div class='lesson-div-hide' id='lessondiv_{{lessondtls.row_id}}'>
+                                            <p style='margin-bottom:10px;padding:10px 0;'>{{lessondtls.lesson_description}}</p>
+
+                                            <a class='my-4 w-100 video-lsn' (click)='playVideo(lessonSteps.video_url)'>{{lessonSteps.video_title}}</a>
+
+                                            <h5 *ngIf='arrPDF.length > 0'>List of Attachments</h5>
+                                            <div class='doclist' *ngIf='arrPDF.length > 0'>
+                                                <label class='label label-default mr-10 active' (click)='downloadLessonPDF(doclist.lesson_id, doclist.pdf_path)' *ngFor='let doclist of docsList'>
+                                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                </label>
+                                            </div>
+                                            <h5 *ngIf='arrLink.length > 0' style='margin-top:10px;'>Links for {{lessondtls.lesson_name}}</h5>
+                                            <div class='doclist' *ngIf='arrLink.length > 0'>
+                                                <label class='label label-success active' (click)='openLink(doclist.meeting_url)' *ngFor='let doclist of docsList' style='margin-right:10px;'>
+                                                    <i class="fa fa-link" aria-hidden="true"></i>
+                                                </label>
+                                            </div>
+
+                                            <a class='my-4 w-100 video-lsn' (click)='takeAssessment(lessondtls.row_id)'>Assessment</a>
+
+                                            <a class='my-4 w-100 video-lsn' *ngIf='certificate' (click)='generatePDF(dtls.class_id)'>Certification</a> <!---->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='add-notes' *ngIf='joinedClass'>
+                            <img src='../../../assets/img/add-notes.png' title='Add Notes' (click)='openNotes()' alt='Add Notes' />
+                        </div>
+                    </div>
+                    <!-- <div class='col-md-3' *ngIf='joinedClass'>
+                        <div class='chat-container'> </div>
+                        <div class='send msg-form'>
+                            <input type='text' class='form-control' placeholder='Enter your message here' name='messageInp' [(ngModel)]='message' id='messageInp' />
+                            <img src='../../../assets/img/send-img.png' id='msg-send' (click)="submitChat()" />
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div class="modal" id="add-notes-modal" [ngStyle]="{'display':displayNotes}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body clearfix">
+                <div class='w-100' style='height: 15px;'>
+                    <span class='close modal-close' (click)='closeNotes()' data-dismiss="modal">&times;</span>
+                </div>
+                <div class='form-group'>
+                    <input type='text' class='form-control w-50' [(ngModel)]="addnotes.title" placeholder='Title' />
+                </div>
+                <angular-editor id='description' name='blog_description' [(ngModel)]="addnotes.content"  [config]="editorConfig" style='margin-top:20px'></angular-editor>
+                <div class='w-100 mt-3 text-right' style='min-height: 15px;'>
+                    <button class='btn btn-primary' (click)='saveNotes()' *ngIf='!edit'>Save</button>
+                    <button class='btn btn-primary' (click)='updateNotes()' *ngIf='edit'>Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="play-video-modal" [ngStyle]="{'display':displayVideoModal}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body clearfix">
+                <div class='w-100' style='height: 15px;'>
+                    <span class='close modal-close' (click)='closeVideoModal()' data-dismiss="modal">&times;</span>
+                </div>
+                <iframe [src]="urlSafe" width="100%" height="512" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="play-assessment-modal" [ngStyle]="{'display':displayAssessmentModal}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body clearfix">
+                <div class='w-100' style='height: 15px;'>
+                    <span class='close modal-close' (click)='closeAssessmentModal()' data-dismiss="modal">&times;</span>
+                </div>
+                <div class='questions px-3'>
+                    <div class="row">
+                        <h3 class='w-100 px-3'>Question {{counter}}</h3>
+                        <p class='w-100 px-3'>{{quiz.question}}</p>
+                        <div class="col-6 py-2" *ngFor="let Option of quiz.options">
+                            <input id="{{Option.option_id}}" type="radio" name='quiz-options' value='{{Option.is_answer}}' /> {{Option.options}}
+                        </div>
+                    </div>
+                    
+                    <div class="row p-3">
+                        <button class='btn btn-primary' (click)='verifyAnswer();' *ngIf="toVerify" style='width:max-content;'>Verify</button>
+                        <button class='btn btn-success' (click)='loadQuiz();' *ngIf="!toVerify" style='width:max-content;'>Next</button>
+                        <!-- button class='btn btn-danger ml-3' (click)='cancelQuiz();'>Cancel</button -->
+                    </div>
+        
+                    <div class="row p-1 m-2 alert alert-danger" *ngIf='!isCorrect'>Your answer is {{quiz.answer}}.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='certificate' class="border-pattern">
+    <div class="certificate-content">
+        <div class="certificate-inner-content">
+            <h1>Certificate</h1>
+            <h2>of Excellence</h2>
+            <h3>This Certificate Is Proudly Presented To</h3>
+            <p>{{certificateVal.mentee_first_name}} {{certificateVal.mentee_last_name}}</p>
+            <h3>{{certificateVal.mentee_first_name}} {{certificateVal.mentee_last_name}} has Completed</h3>
+            <p>Course of "{{certificateVal.course_name}}"</p>
+            <h3>On</h3>
+            <p>{{certificateVal.end_date | date: "dd MMM, YYYY"}}</p>
+            <div class="badge"></div>
+        </div>
+    </div>
+</div>

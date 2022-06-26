@@ -1,0 +1,70 @@
+<div class='container report-container page-container'>
+    <div class='clearfix'>
+        <h3 class='text-left modal-title'> Birthday List </h3> &nbsp; 
+    </div>
+    
+    <div class="card-body h-100 mt-3">
+        <div class='row'>            
+            <div class='form-group pl-0 col-md-3'>
+                <label for='from_date'>From Date</label>
+                <input type='month' id='from_date' class='form-control' [(ngModel)]='filter.from_date' placeholder='From Date' />
+            </div>
+            <div class='form-group col-md-2'>
+                <label for='test' class='w-100'> &nbsp; </label>
+                <button class='btn btn-primary' id='btn_datefilter' (click)='filterDate();'>Filter</button>
+                <button class='btn bg-orange' id='btn_resetfilter' (click)='reset();'>Reset</button>
+            </div>  
+            <div class='form-group col-md-3'>
+                <label for='download_excel' class='w-100'> &nbsp; </label>
+                <!--<span id='download_excel' class='float-right' (click)="exportData()"><i class="fa fa-file-excel-o" aria-hidden="true"></i></span>-->
+                <img src='../../../assets/img/pdf.png' class='action-active-icons float-right' (click)="generatePDF()" />
+                <img src='../../../assets/img/print.png' class='action-active-icons float-right' (click)="printPageArea()" />
+                <img src='../../../assets/img/excel.png' class='action-active-icons float-right' (click)="exportData()" />
+            </div>                              
+        </div>
+        <div class='row' *ngIf='originalfilter.length == 0'>
+            <div class='col-md-12 p-0'>
+                <h3 class='chart_msg'>No Data to be displayed</h3>
+            </div>
+        </div>
+        <div class='row' *ngIf='originalfilter.length > 0' id='printable_box'>
+            <table class='table-bordered table' id="pcs-excel-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>SNS Name</th>
+                        <th>Role</th>
+                        <th>Birthday Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class='excel-hide'> 
+                        <td>
+                            <input type='text' class='form-control filter-fld' id='name' [(ngModel)]='filter.name' (keyup)="filterList($event,'name')" placeholder="Member's Name" />
+                        </td>
+                        <td>
+                            <input type='text' class='form-control filter-fld' id='srs_name' [(ngModel)]='filter.srs_name' (keyup)="filterList($event,'srs_name')" placeholder="SNS Name" />
+                        </td>
+                        <td>
+                            <input type='text' class='form-control filter-fld' id='role_name' [(ngModel)]='filter.role_name' (keyup)="filterList($event,'role_name')" placeholder="Role Name" />
+                        </td>
+                        <td> </td>
+                    </tr>
+
+                    <tr class='excel-hide' *ngIf='attendancelist.length == 0 && originalfilter.length > 0'>
+                        <td colspan='4'>
+                            <h3 class='chart_msg'>No Match Found</h3>
+                        </td>
+                    </tr>
+
+                    <tr *ngFor="let list of attendancelist">
+                        <td>{{ list.name }}</td>
+                        <td>{{ list.srs_name }}</td>
+                        <td>{{ list.role_name }}</td>
+                        <td>{{ list.dob | date:"dd MMMM" }}</td>
+                    </tr> 
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

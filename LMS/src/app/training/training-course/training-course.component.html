@@ -1,0 +1,131 @@
+<div class="wrapper container mb-5 page-container">
+    <div class="main">
+        <main class="content">
+            <!-- <h1 class="h3 mb-3">Course Category</h1> -->
+            <div class="row">
+                <div class="col-md-5 card p-0">
+                    <div class="card-body h-100 p-0">
+                        <h5 class='mb-3 p-4 font-weight-bold card-header'>Add Course</h5>
+                        <div class='row px-4'>
+                            <form  role="form" #f="ngForm" (ngSubmit)="f.form.valid && submit(f)">
+                                <div class='col-md-12'>
+                                    <div class='form-group'>
+                                        <img [src]='imageToShow' alt="Profile Image" class="img-fluid rounded-circle mb-2" *ngIf='imageToShow' />
+                                        <img src='../../../assets/img/course.png' alt="Profile Image" class="img-fluid rounded-circle mb-2" *ngIf='!imageToShow' />
+                                        <input type="file" name='blog_image' class="form-control custom-file-input" id="blog-image" (change)='selectImage($event)' />
+                                    </div>
+                                </div>
+                                <div class='col-md-12'>
+                                    <div class='form-group'>
+                                        <label for='category_name'>Category Name<span style="color: red;">*</span></label>
+                                        <select class='form-control' id='category_name' [(ngModel)]='course.category_id' name="category_id"   #category_id= 'ngModel' [ngClass]="{'invalid-data': category_id.invalid && f.submitted, 'valid-data': category_id.valid && f.submitted}" required>
+                                            <option value=''>Select Category Name</option>
+                                            <option value='{{list.row_id}}' *ngFor='let list of catlist'>{{list.category_name}}</option>
+                                        </select>
+                                        <div class="error_msg" *ngIf="category_id.errors && (category_id.dirty || category_id.touched || f.submitted)">
+                                            <div *ngIf="category_id.errors.required">
+                                                <small class="error_text"> Category Name is required</small>
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='col-md-12'>
+                                    <div class='form-group'>
+                                        <label for='course_name'>Course Name<span style="color: red;">*</span></label>
+                                        <input type='text' class='form-control' pattern="^[^-\s][a-zA-Z0-9_\s-]+$" placeholder='Select Course Name' id='course_name' [(ngModel)]='course.course_name' name="course_name" #course_name= 'ngModel' [ngClass]="{'invalid-data': course_name.invalid && f.submitted, 'valid-data': course_name.valid && f.submitted}" required/>
+                                        <div class="error_msg" *ngIf="course_name.errors && (course_name.dirty || course_name.touched || f.submitted)">
+                                            <div *ngIf="course_name.errors.required">
+                                                <small class="error_text"> Course Name is required</small>
+                                            </div>
+                                            <div *ngIf="course_name.errors.pattern">
+                                                <small class="error_text"> Course Name is invalid</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='col-md-12'>
+                                    <div class='form-group'>
+                                        <label for='description'>Description<span style="color: red;">*</span></label>
+                                        <textarea class='form-control' rows='5' id='description' placeholder="Course's Description" [(ngModel)]='course.course_description' name="course_description"
+                                        #course_description= 'ngModel'[ngClass]="{'invalid-data': course_description.invalid && f.submitted, 'valid-data': course_description.valid && f.submitted}" required></textarea>
+                                        <div class="error_msg" *ngIf="f.submitted && course_description.invalid">
+                                            <div *ngIf="course_description.errors.required">
+                                                <small class="error_text"> Course Description is required</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='col-md-12 mt-3'>
+                                    <div class='form-group'>
+                                        <button class='btn-primary btn' id='add_course' *ngIf='!edit' >Add the Course </button>
+                                        <!-- (click)='addCourse($event)' -->
+                                        <button class='btn-primary btn' id='edit_course' *ngIf='edit' >Update the Course </button>
+                                        <!-- (click)='updateCourse($event)' -->
+                                        <span>&nbsp; &nbsp;&nbsp;&nbsp;</span>
+                                        <span class='btn-primary btn bg-orange'  id='cancel_category' (click)=" resetForm(f)" >Cancel </span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-7'>
+                    <div class="card">
+                        <div class='category-table card-body'>
+                            <table class='table-bordered table mb-0'>
+                                <thead>
+                                    <tr>
+                                        <th>Category Name</th>
+                                        <th>Course Name</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngIf='courselist.length == 0'>
+                                        <td class='table-thumbnail-img' colspan='4'>
+                                            <h4 style='text-align: center;margin-top: 15px;color: #630460;'>No Data to be displayed</h4>
+                                        </td>
+                                    </tr>
+                                    <tr *ngFor='let list of courselist | paginate: {itemsPerPage:10, currentPage: p}'>                                               
+                                        <td>{{list.category_name}}</td>
+                                        <td>{{list.course_name}}</td>
+                                        <td>
+                                            <span [ngClass] = "list.course_status == 'Y' ? 'label label-success' : 'label label-danger'">
+                                                <span *ngIf='list.course_status == "Y"'>Enable</span>
+                                                <span *ngIf='list.course_status == "N"'>Disable</span>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class='action-img-div'>
+                                                <img src='assets/img/edit.png' class='action-img' (click)='editCourse(list.course_id);' />
+                                            </div>
+                                            <label class="switch">
+                                                <input type="checkbox" [attr.checked]="list.course_status == 'Y' ? true : null" (change)='changeStatus($event,list.course_id)' />
+                                                <span class="slider round"></span>
+                                            </label>  
+                                            <!-- <div class='action-img-div switch'>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [attr.checked]="list.course_status == 'Y' ? true : null" (change)='changeStatus($event,list.course_id)' />
+                                                </div>
+                                            </div> -->
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <ul class="pagination float-right">
+                                <li class="page-item"><a (click)="previousClick()" class="page-link">Previous</a></li>
+                                <li *ngFor='let index of pageIndexes' class="page-item">
+                                    <a (click)="changePagination(index)" id='pagination_{{index}}' class="page-link"> {{index}} </a>
+                                </li>
+                                <li class="page-item"><a (click)="nextClick()" class="page-link">Next</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+

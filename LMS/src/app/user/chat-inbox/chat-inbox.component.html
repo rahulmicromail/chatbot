@@ -1,0 +1,16 @@
+<!-- div class="chat-messages">
+    <div class="chat-messages-show-container">
+        <ul class="chat-messages-show-list" id='message-list'> </ul>
+    </div>
+    <div class="chat-messages-create-container"> 
+        <input class="chat-messages-create-input" type="text" [(ngModel)]='message'>
+        <button  class="chat-messages-create-button" (click)="SendMessage()"> Send </button>
+    </div>
+</div -->
+
+<div class='chat-container container' style='margin-top:100px;'> </div>
+
+<div class='container send msg-form'>
+    <input type='text' class='form-control' placeholder='Enter your message here' name='messageInp' [(ngModel)]='message' id='messageInp' />
+    <img src='../../../assets/img/send-img.png' id='msg-send' (click)="submitChat()" />
+</div>

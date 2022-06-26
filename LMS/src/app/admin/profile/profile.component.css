@@ -1,0 +1,9 @@
+.card-body{padding:0;}
+.card-title{font-weight:500;}
+.user-img-action{width:25px;}
+.user-img-action-div{position:absolute;background-color: #e0e0e0c7;border-radius: 50px;padding: 4px;}
+.user-img-div{position:relative;padding:10px 15px;}
+.user-img-div .rounded-circle{width:100%;}
+#delete-icon{bottom: 25px;right: 55%;cursor:pointer;z-index:10;}
+#edit-icon{bottom: 25px;right:45%;cursor:pointer;z-index:10;}
+.rounded-circle{height:300px;}

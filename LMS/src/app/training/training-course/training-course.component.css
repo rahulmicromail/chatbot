@@ -1,0 +1,9 @@
+#blog-image{width: 60%;display: inline-block;margin-left: 20px;}
+.rounded-circle{width: 35%;height:155px;display: inline-block;}
+.card-header{font-weight:600;}
+.action-img{width:20px;}
+.action-img-div{display:inline-block;}
+.switch{margin-left:20px;}
+.form-switch .form-check-input:focus,#blog-image:focus{outline: 0; box-shadow: none;}
+.page-container{margin-top:120px;}
+.action-img{margin-top: -8px;}
